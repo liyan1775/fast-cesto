@@ -42,7 +42,7 @@ async function post(origin, token, path, body) {
 }
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const zipPath = join(root, "dist", "fast-cesto-v0.1.0-alpha.1.zip");
+const zipPath = join(root, "dist", "fast-cesto-v0.1.0-alpha.2.zip");
 const extractedDirectory = mkdtempSync(join(tmpdir(), "Fast Cesto Alpha 中文 空格-"));
 const gameDirectory = join(root, "SolCesto");
 const stateDirectory = join(root, "backups", "epic-1.01.3");

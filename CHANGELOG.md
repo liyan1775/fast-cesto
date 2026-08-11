@@ -2,6 +2,14 @@
 
 All notable public changes are recorded here.
 
+## [0.1.0-alpha.2] - 2026-08-11
+
+- Added a visible English / Simplified Chinese language selector.
+- Defaulted to the browser language when no preference has been saved.
+- Remembered the selected language across page reloads.
+- Localized static controls, live install status, all ten preflight checks, summaries, confirmations, and operation results.
+- Added translation-key parity, locale selection, preflight localization, server static-file, and real-browser regression coverage.
+
 ## [0.1.0-alpha.1] - 2026-08-11
 
 First public Alpha:

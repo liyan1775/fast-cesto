@@ -21,7 +21,7 @@ function sha256File(path) {
 }
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const directory = join(root, "dist", "fast-cesto-v0.1.0-alpha.1");
+const directory = join(root, "dist", "fast-cesto-v0.1.0-alpha.2");
 const zipPath = `${directory}.zip`;
 requireEqual(existsSync(directory), true, "release directory exists");
 requireEqual(existsSync(zipPath), true, "release zip exists");
@@ -32,11 +32,11 @@ const lowerNames = files.map((path) => basename(path).toLowerCase());
 for (const forbidden of ["assets.dat", "solcesto.exe", "package.json", "install-state.json", "operations.ndjson"]) {
   requireEqual(lowerNames.includes(forbidden), false, `forbidden ${forbidden}`);
 }
-for (const required of ["start-fast-cesto.cmd", "release-manifest.json", "README.md", "PRIVACY.md", "KNOWN-ISSUES.md"]) {
+for (const required of ["start-fast-cesto.cmd", "release-manifest.json", "README.md", "PRIVACY.md", "KNOWN-ISSUES.md", "i18n.js"]) {
   requireEqual(lowerNames.includes(required.toLowerCase()), true, `required ${required}`);
 }
 const manifest = JSON.parse(readFileSync(join(directory, "release-manifest.json"), "utf8"));
-requireEqual(manifest.version, "0.1.0-alpha.1", "manifest version");
+requireEqual(manifest.version, "0.1.0-alpha.2", "manifest version");
 requireEqual(manifest.containsGameResources, false, "manifest resource declaration");
 requireEqual(manifest.files.length, files.length - 1, "manifest payload count");
 const payloadByPath = new Map(

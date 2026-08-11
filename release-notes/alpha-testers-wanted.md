@@ -1,4 +1,4 @@
-Fast Cesto `v0.1.0-alpha.1` is now available for public testing.
+Fast Cesto `v0.1.0-alpha.2` is now available for public testing. The local interface can be switched between English and Simplified Chinese and remembers the selection.
 
 Fast Cesto is a free, open-source, unofficial QoL mod for the exact Windows Epic Games Store `1.01.3` build of Sol Cesto. It provides configurable base speed, optional Shift Turbo, optional movement-camera zoom removal, and an optional multiplier for future permanent-gold income. It also includes exact build checks, verified backup/restore, transactional recovery, and privacy-filtered diagnostics.
 

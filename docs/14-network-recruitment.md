@@ -5,7 +5,7 @@
 ## 第一层：GitHub（立即）
 
 - 公开源码、MIT 许可证和游戏资源排除声明；
-- `v0.1.0-alpha.1` 标记为 Pre-release；
+- 最新 `v0.1.0-alpha.2` 标记为 Pre-release；
 - Release 附 ZIP SHA-256、已验证范围和待测矩阵；
 - 建立公开“Alpha testers wanted”Issue；
 - 使用结构化 Alpha 报告与 Bug 表单；安全问题走私密漏洞报告。

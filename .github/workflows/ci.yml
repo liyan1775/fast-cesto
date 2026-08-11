@@ -23,6 +23,7 @@ jobs:
         shell: pwsh
         run: |
           node tools/test-fast-cesto.mjs
+          node tools/test-i18n.mjs
           node tools/test-diagnostics.mjs
           node tools/test-preflight.mjs
           node tools/test-transaction-recovery.mjs

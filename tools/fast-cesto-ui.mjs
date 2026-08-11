@@ -35,6 +35,7 @@ let operationActive = false;
 const STATIC_FILES = new Map([
   ["/", { path: join(UI_DIRECTORY, "index.html"), type: "text/html; charset=utf-8" }],
   ["/app.js", { path: join(UI_DIRECTORY, "app.js"), type: "text/javascript; charset=utf-8" }],
+  ["/i18n.js", { path: join(UI_DIRECTORY, "i18n.js"), type: "text/javascript; charset=utf-8" }],
   ["/styles.css", { path: join(UI_DIRECTORY, "styles.css"), type: "text/css; charset=utf-8" }],
 ]);
 

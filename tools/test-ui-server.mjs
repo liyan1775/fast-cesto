@@ -75,8 +75,14 @@ try {
   requireEqual(page.status, 200, "page status");
   requireEqual(page.headers.get("content-security-policy")?.includes("default-src 'self'"), true, "page CSP");
   requireEqual(html.includes("Fast Cesto"), true, "page title");
+  requireEqual(html.includes('id="languageSelect"'), true, "language selector present");
   const token = html.match(/name="fast-cesto-token" content="([^"]+)"/)?.[1];
   requireEqual(typeof token, "string", "session token present");
+
+  const i18nModule = await fetch(`${origin}/i18n.js`);
+  requireEqual(i18nModule.status, 200, "i18n module status");
+  requireEqual(i18nModule.headers.get("content-type")?.includes("text/javascript"), true, "i18n module type");
+  requireEqual((await i18nModule.text()).includes("SUPPORTED_LANGUAGES"), true, "i18n module body");
 
   const unauthorized = await post(origin, null, "/api/status", { gameDirectory, stateDirectory });
   requireEqual(unauthorized.status, 403, "unauthorized request");

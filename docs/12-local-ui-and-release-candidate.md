@@ -1,6 +1,6 @@
 # 本地 UI、诊断与封闭 Alpha 包
 
-> 当前版本：`v0.1.0-alpha.1` 候选包。它已通过本机自动化和浏览器回归，但尚未经过 3–5 台外部 Epic 环境验证。
+> 当前版本：`v0.1.0-alpha.2` 候选包。它已通过本机自动化和中英文浏览器回归，但尚未经过 3–5 台外部 Epic 环境验证。
 
 ## 1. 本地配置界面
 
@@ -67,17 +67,17 @@ node tools\build-release.mjs
 node tools\test-release-bundle.mjs
 ```
 
-产物位于 `dist/fast-cesto-v0.1.0-alpha.1/` 及同名 ZIP。构建器只复制固定白名单，并审计：
+产物位于 `dist/fast-cesto-v0.1.0-alpha.2/` 及同名 ZIP。构建器只复制固定白名单，并审计：
 
 - 禁止 `assets.dat`、游戏 EXE、DLL、`package.json`、安装状态、事务文件和操作日志；
 - 禁止数据库、日志和超过 5 MiB 的意外文件；
 - 禁止常见凭证模式、开发工作区绝对路径和用户目录；
 - 为所有 payload 文件生成大小与 SHA-256 manifest。
 
-当前候选包共 20 个文件，ZIP 大小 `42,517` 字节，SHA-256：
+当前候选包共 21 个文件，ZIP 大小 `48,642` 字节，SHA-256：
 
 ```text
-FBDE8E1801B432829AD4DBF030F40B84081AAA7817FA208FCFF35B1F43EEB312
+08CDF5EC20F0D245DBEC13ED728509FAA2C26A69489235567EFC24EF3355EC57
 ```
 
 该哈希只对应当前本机构建候选；任何代码或发布文档变化后必须重新构建并更新。

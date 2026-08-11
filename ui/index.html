@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,120 +10,130 @@
 <body>
   <main class="shell">
     <header class="hero">
-      <div>
+      <div class="hero-copy">
         <p class="eyebrow">SOL CESTO · EPIC 1.01.3</p>
         <h1>Fast Cesto</h1>
-        <p class="subtitle">本地、可恢复的节奏与进度 QoL 配置工具</p>
+        <p class="subtitle" data-i18n="app.subtitle">Local, recoverable pacing and progression QoL configurator</p>
       </div>
-      <div id="statusBadge" class="status-badge unknown"><span></span>正在检查</div>
+      <div class="hero-tools">
+        <label class="language-picker">
+          <span>Language / 语言</span>
+          <select id="languageSelect">
+            <option value="en">English</option>
+            <option value="zh-CN">简体中文</option>
+          </select>
+        </label>
+        <div id="statusBadge" class="status-badge unknown"><span></span><span id="statusText" data-i18n="status.checking">Checking</span></div>
+      </div>
     </header>
 
-    <section class="notice" aria-label="隐私说明">
-      <strong>所有处理均在本机完成。</strong> 工具不会联网、读取存档或上传游戏文件；安装前请关闭游戏。
+    <section class="notice" aria-label="Privacy notice" data-i18n-aria-label="notice.label">
+      <strong data-i18n="notice.prefix">Everything is processed locally.</strong>
+      <span data-i18n="notice.text">The tool does not connect to the internet, read saves, or upload game files. Close the game before applying changes.</span>
     </section>
 
     <section class="panel paths-panel">
       <div class="section-heading">
         <div>
-          <p class="step">01 · 位置</p>
-          <h2>确认游戏目录</h2>
+          <p class="step" data-i18n="step.location">01 · Location</p>
+          <h2 data-i18n="heading.gameDirectory">Confirm game directory</h2>
         </div>
-        <button id="refreshButton" class="button ghost" type="button">刷新状态</button>
+        <button id="refreshButton" class="button ghost" type="button" data-i18n="action.refresh">Refresh status</button>
       </div>
       <label class="field">
-        <span>SolCesto 目录</span>
+        <span data-i18n="field.gameDirectory">SolCesto directory</span>
         <input id="gameDirectory" type="text" spellcheck="false" autocomplete="off">
-        <small>目录内应包含 <code>SolCesto.exe</code> 和 <code>www\assets.dat</code></small>
+        <small><span data-i18n="field.gameDirectoryHelp.before">The folder must contain</span> <code>SolCesto.exe</code> <span data-i18n="field.gameDirectoryHelp.and">and</span> <code>www\assets.dat</code></small>
       </label>
       <details>
-        <summary>高级：备份与状态目录</summary>
+        <summary data-i18n="details.advanced">Advanced: backup and state directory</summary>
         <label class="field compact">
-          <span>状态目录</span>
+          <span data-i18n="field.stateDirectory">State directory</span>
           <input id="stateDirectory" type="text" spellcheck="false" autocomplete="off">
         </label>
       </details>
       <div class="preflight-box">
         <div class="preflight-heading">
           <div>
-            <b>Alpha 兼容性预检</b>
-            <small>只读检查版本、权限、空间、备份和游戏进程</small>
+            <b data-i18n="preflight.title">Alpha compatibility preflight</b>
+            <small data-i18n="preflight.help">Read-only checks for version, permissions, space, backup, and the game process</small>
           </div>
-          <output id="preflightStatus" class="preflight-status pending">等待检查</output>
+          <output id="preflightStatus" class="preflight-status pending" data-i18n="preflight.waiting">Waiting</output>
         </div>
-        <ul id="preflightChecks" class="preflight-checks"><li class="pending"><span></span>正在收集环境信息…</li></ul>
+        <ul id="preflightChecks" class="preflight-checks"><li class="pending"><span></span><div data-i18n="preflight.collecting">Collecting environment information…</div></li></ul>
       </div>
     </section>
 
     <section class="panel">
       <div class="section-heading">
         <div>
-          <p class="step">02 · 体验</p>
-          <h2>选择基础节奏</h2>
+          <p class="step" data-i18n="step.experience">02 · Experience</p>
+          <h2 data-i18n="heading.basePace">Choose base pacing</h2>
         </div>
         <output id="effectiveSpeed" class="metric">1.5×</output>
       </div>
       <fieldset class="choice-grid" id="speedChoices">
-        <legend class="sr-only">基础速度</legend>
-        <label><input type="radio" name="speed" value="1"><span><b>1×</b><small>原版</small></span></label>
-        <label><input type="radio" name="speed" value="1.25"><span><b>1.25×</b><small>温和</small></span></label>
-        <label><input type="radio" name="speed" value="1.5" checked><span><b>1.5×</b><small>推荐</small></span></label>
-        <label><input type="radio" name="speed" value="2"><span><b>2×</b><small>快速</small></span></label>
+        <legend class="sr-only" data-i18n="legend.baseSpeed">Base speed</legend>
+        <label><input type="radio" name="speed" value="1"><span><b>1×</b><small data-i18n="speed.original">Original</small></span></label>
+        <label><input type="radio" name="speed" value="1.25"><span><b>1.25×</b><small data-i18n="speed.gentle">Gentle</small></span></label>
+        <label><input type="radio" name="speed" value="1.5" checked><span><b>1.5×</b><small data-i18n="speed.recommended">Recommended</small></span></label>
+        <label><input type="radio" name="speed" value="2"><span><b>2×</b><small data-i18n="speed.fast">Fast</small></span></label>
       </fieldset>
       <label class="switch-row">
-        <span><b>关闭行动镜头 Zoom</b><small>只移除行动时反复放大的镜头 Tween</small></span>
+        <span><b data-i18n="zoom.title">Disable movement camera zoom</b><small data-i18n="zoom.help">Removes only the repeated camera Tween during movement</small></span>
         <input id="disableMovementZoom" type="checkbox" checked>
       </label>
     </section>
 
     <section class="panel split-panel">
       <div>
-        <p class="step">03 · 进度</p>
-        <h2>永久金币倍率</h2>
-        <p class="hint">只影响未来获得的永久金币，不修改已有余额或购买价格。</p>
+        <p class="step" data-i18n="step.progress">03 · Progression</p>
+        <h2 data-i18n="heading.goldMultiplier">Permanent-gold multiplier</h2>
+        <p class="hint" data-i18n="gold.hint">Affects only permanent gold earned in the future. Existing balances and purchase prices are unchanged.</p>
         <fieldset class="segmented">
-          <legend class="sr-only">金币倍率</legend>
+          <legend class="sr-only" data-i18n="legend.goldMultiplier">Gold multiplier</legend>
           <label><input type="radio" name="gold" value="1"><span>1×</span></label>
-          <label><input type="radio" name="gold" value="2" checked><span>2× 推荐</span></label>
+          <label><input type="radio" name="gold" value="2" checked><span data-i18n="gold.recommended">2× Recommended</span></label>
           <label><input type="radio" name="gold" value="3"><span>3×</span></label>
         </fieldset>
       </div>
       <div class="turbo-block">
         <div class="inline-heading">
           <div>
-            <p class="step">04 · 临时加速</p>
-            <h2>按住 Turbo</h2>
+            <p class="step" data-i18n="step.turbo">04 · Temporary speed</p>
+            <h2 data-i18n="heading.turbo">Hold for Turbo</h2>
           </div>
           <input id="turboEnabled" class="toggle" type="checkbox">
         </div>
         <div id="turboSettings" class="turbo-settings disabled">
-          <label class="field compact"><span>按键</span><select id="turboKey"><option value="ShiftLeft">左 Shift</option><option value="ShiftRight">右 Shift</option></select></label>
-          <label class="field compact"><span>额外乘数</span><select id="turboMultiplier"><option value="1.5">1.5×</option><option value="2" selected>2×</option><option value="3">3×</option></select></label>
+          <label class="field compact"><span data-i18n="field.key">Key</span><select id="turboKey"><option value="ShiftLeft" data-i18n="key.leftShift">Left Shift</option><option value="ShiftRight" data-i18n="key.rightShift">Right Shift</option></select></label>
+          <label class="field compact"><span data-i18n="field.extraMultiplier">Extra multiplier</span><select id="turboMultiplier"><option value="1.5">1.5×</option><option value="2" selected>2×</option><option value="3">3×</option></select></label>
         </div>
       </div>
     </section>
 
     <section class="summary-panel">
       <div>
-        <p class="step">05 · 应用</p>
-        <h2 id="summaryTitle">基础 1.5× · 金币 2× · Turbo 关闭</h2>
-        <p id="summaryDetail">行动 Zoom 将关闭；可随时精确恢复原版。</p>
+        <p class="step" data-i18n="step.apply">05 · Apply</p>
+        <h2 id="summaryTitle">Base 1.5× · Gold 2× · Turbo off</h2>
+        <p id="summaryDetail">Movement zoom will be disabled; the original can be restored precisely at any time.</p>
       </div>
       <div class="actions">
-        <label class="confirm"><input id="gameClosed" type="checkbox">我已关闭游戏</label>
-        <button id="applyButton" class="button primary" type="button" disabled>应用配置</button>
-        <button id="restoreButton" class="button danger" type="button">恢复原版</button>
+        <label class="confirm"><input id="gameClosed" type="checkbox"><span data-i18n="confirm.gameClosed">I have closed the game</span></label>
+        <button id="applyButton" class="button primary" type="button" disabled data-i18n="action.apply">Apply configuration</button>
+        <button id="restoreButton" class="button danger" type="button" data-i18n="action.restore">Restore original</button>
       </div>
     </section>
 
     <section class="activity" aria-live="polite">
-      <div><span id="activityDot" class="activity-dot"></span><strong id="activityTitle">准备就绪</strong></div>
-      <p id="activityMessage">正在读取当前安装状态。</p>
-      <button id="diagnosticButton" class="text-button" type="button">下载脱敏诊断报告</button>
+      <div><span id="activityDot" class="activity-dot"></span><strong id="activityTitle" data-i18n="activity.ready">Ready</strong></div>
+      <p id="activityMessage" data-i18n="activity.reading">Reading the current installation state.</p>
+      <button id="diagnosticButton" class="text-button" type="button" data-i18n="action.diagnostic">Download privacy-filtered diagnostics</button>
     </section>
 
     <footer>
-      <span>Fast Cesto Internal Alpha · 非官方工具</span>
-      <button id="shutdownButton" class="text-button" type="button">关闭工具</button>
+      <span data-i18n="footer.label">Fast Cesto Public Alpha · Unofficial tool</span>
+      <button id="shutdownButton" class="text-button" type="button" data-i18n="action.shutdown">Close tool</button>
     </footer>
   </main>
   <script type="module" src="/app.js"></script>

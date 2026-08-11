@@ -40,7 +40,7 @@ async function post(origin, token, path, body) {
 }
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const serverPath = resolve(root, "dist", "fast-cesto-v0.1.0-alpha.1", "tools", "fast-cesto-ui.mjs");
+const serverPath = resolve(root, "dist", "fast-cesto-v0.1.0-alpha.2", "tools", "fast-cesto-ui.mjs");
 const gameDirectory = resolve(root, "SolCesto");
 const stateDirectory = resolve(root, "backups", "epic-1.01.3");
 const child = spawn(

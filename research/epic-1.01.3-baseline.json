@@ -170,11 +170,21 @@
     "localUi": {
       "bindAddress": "127.0.0.1",
       "randomPort": true,
+      "languages": [
+        "en",
+        "zh-CN"
+      ],
+      "browserLanguageDefault": true,
+      "rememberedLanguageChoice": true,
       "hostOriginAndSessionTokenChecks": true,
       "requestBodyLimitBytes": 32768,
       "shellInvocationUsed": false,
       "browserChecks": [
         "current-config-loaded",
+        "browser-language-default",
+        "english-simplified-chinese-live-switch",
+        "language-choice-persists-after-reload",
+        "all-preflight-checks-localized",
         "close-game-confirmation-gates-apply",
         "same-config-apply-is-idempotent",
         "configuration-summary-and-effective-speed-update",
@@ -186,11 +196,12 @@
       ]
     },
     "releaseCandidate": {
-      "version": "0.1.0-alpha.1",
+      "version": "0.1.0-alpha.2",
       "requiresNodeMajorAtLeast": 20,
       "payloadFileCount": 20,
-      "zipBytes": 42517,
-      "zipSha256": "FBDE8E1801B432829AD4DBF030F40B84081AAA7817FA208FCFF35B1F43EEB312",
+      "releaseFileCount": 21,
+      "zipBytes": 48642,
+      "zipSha256": "08CDF5EC20F0D245DBEC13ED728509FAA2C26A69489235567EFC24EF3355EC57",
       "gameResourcesIncluded": false,
       "allowlistAndSecretAuditPassed": true,
       "alphaTestingProtocolIncluded": true,

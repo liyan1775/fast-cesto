@@ -1,8 +1,17 @@
+import {
+  LANGUAGE_STORAGE_KEY,
+  SUPPORTED_LANGUAGES,
+  chooseInitialLanguage,
+  translate,
+  translatePreflightCheck,
+} from "/i18n.js";
+
 const token = document.querySelector('meta[name="fast-cesto-token"]').content;
 const $ = (selector) => document.querySelector(selector);
 const gameDirectory = $("#gameDirectory");
 const stateDirectory = $("#stateDirectory");
 const statusBadge = $("#statusBadge");
+const statusText = $("#statusText");
 const activityDot = $("#activityDot");
 const activityTitle = $("#activityTitle");
 const activityMessage = $("#activityMessage");
@@ -10,7 +19,75 @@ const gameClosed = $("#gameClosed");
 const applyButton = $("#applyButton");
 const turboEnabled = $("#turboEnabled");
 const turboSettings = $("#turboSettings");
-let latestPreflight = null;
+const languageSelect = $("#languageSelect");
+let currentLanguage = "en";
+let latestStatus;
+let latestPreflight;
+let lastActivity = {
+  kind: "",
+  titleKey: "activity.ready",
+  messageKey: "activity.reading",
+  parameters: {},
+};
+
+function t(key, parameters = {}) {
+  return translate(currentLanguage, key, parameters);
+}
+
+function readStoredLanguage() {
+  try { return localStorage.getItem(LANGUAGE_STORAGE_KEY); } catch { return null; }
+}
+
+function storeLanguage(language) {
+  try { localStorage.setItem(LANGUAGE_STORAGE_KEY, language); } catch {}
+}
+
+function applyStaticTranslations() {
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    element.textContent = t(element.dataset.i18n);
+  });
+  document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+    element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
+  });
+}
+
+function renderActivity() {
+  activityDot.className = `activity-dot ${lastActivity.kind}`;
+  activityTitle.textContent = t(lastActivity.titleKey, lastActivity.parameters);
+  activityMessage.textContent = lastActivity.rawMessage
+    ?? t(lastActivity.messageKey, lastActivity.parameters);
+}
+
+function renderStatus() {
+  if (latestStatus === undefined) return;
+  const status = latestStatus;
+  statusBadge.className = `status-badge ${status?.state || "unknown"}`;
+  if (!status) {
+    statusText.textContent = t("status.unrecognized");
+    return;
+  }
+  const names = {
+    installed: t("status.installed"),
+    original: t("status.original"),
+    unknown: t("status.unknown"),
+  };
+  statusText.textContent = status.gameRunning
+    ? t("status.gameRunning")
+    : names[status.state] || status.state;
+  if (status.gameRunning) statusBadge.className = "status-badge error";
+}
+
+function setLanguage(language, { persist = true } = {}) {
+  currentLanguage = SUPPORTED_LANGUAGES.includes(language) ? language : "en";
+  document.documentElement.lang = currentLanguage;
+  languageSelect.value = currentLanguage;
+  if (persist) storeLanguage(currentLanguage);
+  applyStaticTranslations();
+  renderStatus();
+  if (latestPreflight !== undefined) renderPreflight(latestPreflight);
+  renderSummary();
+  renderActivity();
+}
 
 async function api(path, body) {
   const response = await fetch(path, {
@@ -22,7 +99,7 @@ async function api(path, body) {
     body: JSON.stringify(body),
   });
   if (!response.ok) {
-    let message = `请求失败（${response.status}）`;
+    let message = t("api.requestFailed", { status: response.status });
     try { message = (await response.json()).error || message; } catch {}
     throw new Error(message);
   }
@@ -46,29 +123,25 @@ function settings() {
   };
 }
 
-function setActivity(kind, title, message) {
-  activityDot.className = `activity-dot ${kind}`;
-  activityTitle.textContent = title;
-  activityMessage.textContent = message;
+function setActivity(kind, titleKey, messageKey, parameters = {}) {
+  lastActivity = { kind, titleKey, messageKey, parameters };
+  renderActivity();
 }
 
-function setBusy(value, message = "正在处理，请稍候…") {
+function setActivityRaw(kind, titleKey, rawMessage) {
+  lastActivity = { kind, titleKey, rawMessage, parameters: {} };
+  renderActivity();
+}
+
+function setBusy(value, messageKey = "busy.wait") {
   document.body.classList.toggle("busy", value);
-  if (value) setActivity("", "处理中", message);
+  if (value) setActivity("", "activity.processing", messageKey);
   updateApplyState();
 }
 
 function describeStatus(status) {
-  statusBadge.className = `status-badge ${status?.state || "unknown"}`;
-  if (!status) {
-    statusBadge.lastChild.textContent = "无法识别";
-    return;
-  }
-  const names = { installed: "已安装 Mod", original: "原版", unknown: "未知版本" };
-  statusBadge.lastChild.textContent = status.gameRunning
-    ? "游戏正在运行"
-    : names[status.state] || status.state;
-  if (status.gameRunning) statusBadge.className = "status-badge error";
+  latestStatus = status;
+  renderStatus();
 }
 
 function renderPreflight(preflight) {
@@ -77,24 +150,31 @@ function renderPreflight(preflight) {
   const list = $("#preflightChecks");
   if (!preflight) {
     output.className = "preflight-status pending";
-    output.textContent = "等待检查";
-    list.innerHTML = '<li class="pending"><span></span>修改目录后请刷新状态。</li>';
+    output.textContent = t("preflight.waiting");
+    const item = document.createElement("li");
+    item.className = "pending";
+    item.append(document.createElement("span"));
+    const text = document.createElement("div");
+    text.textContent = t("preflight.changeRefresh");
+    item.append(text);
+    list.replaceChildren(item);
     updateApplyState();
     return;
   }
   output.className = `preflight-status ${preflight.readyToInstall ? "ready" : "blocked"}`;
   output.textContent = preflight.readyToInstall
-    ? preflight.warningIds.length ? "可用，有提示" : "可以安装"
-    : `${preflight.blockingIssueIds.length} 项阻止`;
+    ? preflight.warningIds.length ? t("preflight.readyWarnings") : t("preflight.ready")
+    : t("preflight.blocking", { count: preflight.blockingIssueIds.length });
   list.replaceChildren(...preflight.checks.map((check) => {
     const item = document.createElement("li");
     item.className = check.status;
     const dot = document.createElement("span");
     const text = document.createElement("div");
     const strong = document.createElement("strong");
-    strong.textContent = check.summary;
+    const localized = translatePreflightCheck(currentLanguage, check);
+    strong.textContent = localized.summary;
     const detail = document.createElement("div");
-    detail.textContent = check.detail;
+    detail.textContent = localized.detail;
     text.append(strong, detail);
     item.append(dot, text);
     return item;
@@ -123,8 +203,13 @@ function renderSummary() {
   turboSettings.classList.toggle("disabled", !value.turbo.enabled);
   const effective = value.turbo.enabled ? value.speed * value.turbo.multiplier : value.speed;
   $("#effectiveSpeed").textContent = value.turbo.enabled ? `${value.speed}× → ${effective}×` : `${value.speed}×`;
-  $("#summaryTitle").textContent = `基础 ${value.speed}× · 金币 ${value.goldMultiplier}× · ${value.turbo.enabled ? `${value.turbo.key === "ShiftLeft" ? "左" : "右"} Shift Turbo ${value.turbo.multiplier}×` : "Turbo 关闭"}`;
-  $("#summaryDetail").textContent = `${value.disableMovementZoom ? "行动 Zoom 将关闭" : "保留原版行动 Zoom"}；可随时精确恢复原版。`;
+  $("#summaryTitle").textContent = t(value.turbo.enabled ? "summary.on" : "summary.off", {
+    speed: value.speed,
+    gold: value.goldMultiplier,
+    side: t(value.turbo.key === "ShiftLeft" ? "summary.side.left" : "summary.side.right"),
+    multiplier: value.turbo.multiplier,
+  });
+  $("#summaryDetail").textContent = t(value.disableMovementZoom ? "summary.zoomOff" : "summary.zoomOn");
 }
 
 function updateApplyState() {
@@ -134,30 +219,33 @@ function updateApplyState() {
 }
 
 async function refreshStatus({ loadConfig = true } = {}) {
-  setBusy(true, "正在读取归档哈希与备份状态…");
+  setBusy(true, "busy.reading");
   try {
     const response = await api("/api/status", paths());
     const data = await response.json();
     describeStatus(data.status);
     renderPreflight(data.preflight);
     if (loadConfig && data.status.activeConfig) applyConfigToForm(data.status.activeConfig);
-    const message = data.status.state === "installed"
-      ? `备份${data.status.backupValid ? "有效" : "异常"}，配置状态${data.status.stateManifestValid ? "有效" : "异常"}。`
+    const messageKey = data.status.state === "installed"
+      ? "activity.installedState"
       : data.status.state === "original"
-        ? "检测到受支持的 Epic 1.01.3 原版归档。"
-        : "当前归档不属于已支持的原版或已登记 Mod。";
-    setActivity(data.status.state === "unknown" ? "error" : "success", "状态已刷新", message);
+        ? "activity.detectedOriginal"
+        : "activity.unsupportedArchive";
+    setActivity(data.status.state === "unknown" ? "error" : "success", "activity.statusRefreshed", messageKey, {
+      backup: t(data.status.backupValid ? "value.valid" : "value.invalid"),
+      manifest: t(data.status.stateManifestValid ? "value.valid" : "value.invalid"),
+    });
   } catch (error) {
     describeStatus(null);
     renderPreflight(null);
-    setActivity("error", "无法读取状态", error.message);
+    setActivityRaw("error", "activity.cannotReadStatus", error.message);
   } finally {
     setBusy(false);
   }
 }
 
 async function bootstrap() {
-  setBusy(true, "正在连接本地补丁器…");
+  setBusy(true, "busy.connecting");
   try {
     const response = await api("/api/bootstrap", {});
     const data = await response.json();
@@ -167,38 +255,40 @@ async function bootstrap() {
       describeStatus(data.status);
       renderPreflight(data.preflight);
       if (data.status.activeConfig) applyConfigToForm(data.status.activeConfig);
-      setActivity("success", "准备就绪", data.status.gameRunning ? "请先关闭游戏。" : "选择配置后即可应用。当前操作只发生在本机。" );
+      setActivity("success", "activity.ready", data.status.gameRunning ? "activity.closeGame" : "activity.readyMessage");
     } else {
       describeStatus(null);
       renderPreflight(null);
-      setActivity("error", "需要确认目录", data.error || "未找到游戏目录。" );
+      if (data.error) setActivityRaw("error", "activity.confirmDirectory", data.error);
+      else setActivity("error", "activity.confirmDirectory", "activity.directoryNotFound");
     }
   } catch (error) {
     describeStatus(null);
     renderPreflight(null);
-    setActivity("error", "界面初始化失败", error.message);
+    setActivityRaw("error", "activity.initializationFailed", error.message);
   } finally {
     setBusy(false);
   }
 }
 
 document.querySelectorAll('input[name="speed"], input[name="gold"], #disableMovementZoom, #turboEnabled, #turboKey, #turboMultiplier').forEach((input) => input.addEventListener("change", renderSummary));
+languageSelect.addEventListener("change", () => setLanguage(languageSelect.value));
 gameClosed.addEventListener("change", updateApplyState);
 gameDirectory.addEventListener("input", () => renderPreflight(null));
 stateDirectory.addEventListener("input", () => renderPreflight(null));
 $("#refreshButton").addEventListener("click", () => refreshStatus());
 
 applyButton.addEventListener("click", async () => {
-  setBusy(true, "正在生成、验证并交换本地归档…");
+  setBusy(true, "busy.installing");
   try {
     const response = await api("/api/install", { ...paths(), settings: settings() });
     const data = await response.json();
     describeStatus(data.status);
     renderPreflight(data.preflight);
-    setActivity("success", "配置已应用", data.result.result === "already-installed" ? "当前已经是这套配置，文件没有被重写。" : "新归档已通过哈希验证，原版备份保持有效。" );
+    setActivity("success", "activity.configurationApplied", data.result.result === "already-installed" ? "activity.alreadyInstalled" : "activity.archiveApplied");
     gameClosed.checked = false;
   } catch (error) {
-    setActivity("error", "应用失败", error.message);
+    setActivityRaw("error", "activity.applyFailed", error.message);
   } finally {
     setBusy(false);
   }
@@ -206,27 +296,27 @@ applyButton.addEventListener("click", async () => {
 
 $("#restoreButton").addEventListener("click", async () => {
   if (!gameClosed.checked) {
-    setActivity("error", "尚未确认", "请先勾选“我已关闭游戏”。");
+    setActivity("error", "activity.notConfirmed", "activity.confirmClosedFirst");
     return;
   }
-  if (!window.confirm("恢复原版会关闭当前 Mod 功能，但不会改动存档或已获得金币。继续吗？")) return;
-  setBusy(true, "正在验证备份并恢复原版归档…");
+  if (!window.confirm(t("confirm.restore"))) return;
+  setBusy(true, "busy.restoring");
   try {
     const response = await api("/api/restore", paths());
     const data = await response.json();
     describeStatus(data.status);
     renderPreflight(data.preflight);
-    setActivity("success", "已恢复原版", "归档已恢复到受支持原版哈希。已获得的金币不会回滚。" );
+    setActivity("success", "activity.originalRestored", "activity.restoreMessage");
     gameClosed.checked = false;
   } catch (error) {
-    setActivity("error", "恢复失败", error.message);
+    setActivityRaw("error", "activity.restoreFailed", error.message);
   } finally {
     setBusy(false);
   }
 });
 
 $("#diagnosticButton").addEventListener("click", async () => {
-  setBusy(true, "正在生成不含路径、存档和游戏资源的报告…");
+  setBusy(true, "busy.diagnostic");
   try {
     const response = await api("/api/diagnostic", paths());
     const blob = await response.blob();
@@ -236,9 +326,9 @@ $("#diagnosticButton").addEventListener("click", async () => {
     link.download = response.headers.get("Content-Disposition")?.match(/filename="([^"]+)"/)?.[1] || "fast-cesto-diagnostic.json";
     link.click();
     URL.revokeObjectURL(url);
-    setActivity("success", "诊断报告已下载", "报告只包含版本、哈希、配置枚举和脱敏操作结果。" );
+    setActivity("success", "activity.diagnosticDownloaded", "activity.diagnosticMessage");
   } catch (error) {
-    setActivity("error", "诊断导出失败", error.message);
+    setActivityRaw("error", "activity.diagnosticFailed", error.message);
   } finally {
     setBusy(false);
   }
@@ -247,11 +337,14 @@ $("#diagnosticButton").addEventListener("click", async () => {
 $("#shutdownButton").addEventListener("click", async () => {
   try {
     await api("/api/shutdown", {});
-    setActivity("success", "工具已关闭", "现在可以关闭此页面。" );
+    setActivity("success", "activity.toolClosed", "activity.toolClosedMessage");
   } catch (error) {
-    setActivity("error", "关闭失败", error.message);
+    setActivityRaw("error", "activity.closeFailed", error.message);
   }
 });
 
-renderSummary();
+const browserLanguages = Array.isArray(navigator.languages) && navigator.languages.length
+  ? navigator.languages
+  : [navigator.language];
+setLanguage(chooseInitialLanguage(readStoredLanguage(), browserLanguages), { persist: false });
 bootstrap();

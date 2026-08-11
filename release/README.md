@@ -1,4 +1,4 @@
-# Fast Cesto v0.1.0-alpha.1
+# Fast Cesto v0.1.0-alpha.2
 
 Fast Cesto is an unofficial QoL patcher for the exact Epic Games Store Windows `1.01.3` build of **Sol Cesto**.
 
@@ -26,6 +26,7 @@ https://github.com/liyan1775/fast-cesto/issues/new?template=alpha-test.yml
 - Future permanent-gold income: `1× / 2× / 3×`
 - Verified backup, interrupted-operation recovery, and exact original restore
 - Ten compatibility checks and privacy-filtered diagnostics
+- English and Simplified Chinese UI; choose a language at the top of the page
 
 The local UI listens only on `127.0.0.1`. Fast Cesto does not connect to the internet, upload files, or read game saves. It builds the mod locally from the user's own hash-matched `www/assets.dat`. This ZIP contains no game archive, EXE, DLL, Epic SDK, credential, or save.
 
@@ -46,6 +47,6 @@ Fast Cesto 是只支持 Epic Games Store Windows `1.01.3` 精确构建的非官�
 
 使用步骤：安装 Node.js 20+；自行备份存档；完全关闭游戏；双击 `start-fast-cesto.cmd`；查看全部兼容性检查并应用配置；然后从 Epic 正常启动。卸载时关闭游戏并选择“恢复原版”。
 
-功能包括基础速度、Shift Turbo、关闭行动 Zoom、未来永久金币倍率、自动备份/中断恢复/精确还原，以及脱敏诊断。工具不联网、不上传文件、不读取存档，也不在 ZIP 中包含任何游戏归档、EXE、DLL、Epic SDK、凭据或存档。
+功能包括基础速度、Shift Turbo、关闭行动 Zoom、未来永久金币倍率、自动备份/中断恢复/精确还原，以及脱敏诊断。页面顶部可在 English / 简体中文之间切换并记住选择。工具不联网、不上传文件、不读取存档，也不在 ZIP 中包含任何游戏归档、EXE、DLL、Epic SDK、凭据或存档。
 
 请先阅读 `ALPHA-TESTING.md`，再通过上述 GitHub Issue 表单反馈。不要上传游戏文件、存档、Epic 配置、用户名或完整路径。

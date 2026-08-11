@@ -1,6 +1,6 @@
 # Fast Cesto
 
-[简体中文](README.zh-CN.md) · [Download the public Alpha](https://github.com/liyan1775/fast-cesto/releases/tag/v0.1.0-alpha.1) · [Report an Alpha test](https://github.com/liyan1775/fast-cesto/issues/new?template=alpha-test.yml)
+[简体中文](README.zh-CN.md) · [Download the public Alpha](https://github.com/liyan1775/fast-cesto/releases/tag/v0.1.0-alpha.2) · [Report an Alpha test](https://github.com/liyan1775/fast-cesto/issues/new?template=alpha-test.yml)
 
 Fast Cesto is a free, open-source, unofficial quality-of-life mod for the Windows Epic Games Store version of **Sol Cesto**. It reduces repeated waiting and camera motion while keeping the original game files recoverable.
 
@@ -15,6 +15,7 @@ Fast Cesto is a free, open-source, unofficial quality-of-life mod for the Window
 - Future permanent-gold income multiplier: `1×`, `2×`, or `3×`
 - Exact build/hash checks, automatic original-file backup, transactional recovery, and one-click restore
 - Offline local UI and privacy-filtered diagnostic reports
+- English and Simplified Chinese UI with a remembered language choice
 
 The public default is conservative: `1.5×` speed, movement zoom disabled, gold at `1×`, and Turbo disabled. The recommended preset uses `2×` future gold. Existing balances, purchases, story rewards, saves, DRM, and probability rules are not modified.
 
@@ -29,7 +30,7 @@ Steam and unknown game builds are intentionally rejected instead of being modifi
 ## Install and restore
 
 1. Back up your Sol Cesto save. The game does not provide cloud saves on Epic.
-2. Download `fast-cesto-v0.1.0-alpha.1.zip` from the latest GitHub Release and verify its SHA-256 shown on that page.
+2. Download `fast-cesto-v0.1.0-alpha.2.zip` from the latest GitHub Release and verify its SHA-256 shown on that page.
 3. Extract the ZIP to a normal folder; do not run it inside the archive.
 4. Fully close Sol Cesto, then double-click `start-fast-cesto.cmd`.
 5. Review the ten compatibility checks, choose a preset, and apply it.

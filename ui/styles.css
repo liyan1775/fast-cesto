@@ -29,6 +29,10 @@ button, input, select { font: inherit; }
 button, label, summary { -webkit-tap-highlight-color: transparent; }
 .shell { width: min(1040px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 36px; }
 .hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
+.hero-tools { display: grid; justify-items: end; gap: 10px; }
+.language-picker { display: flex; align-items: center; gap: 9px; color: var(--muted); font-size: 12px; font-weight: 700; }
+.language-picker select { padding: 7px 28px 7px 10px; border: 1px solid var(--line); border-radius: 9px; outline: none; color: var(--text); background: #111511; }
+.language-picker select:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(183, 227, 74, .12); }
 .eyebrow, .step { margin: 0 0 8px; color: var(--green); font-size: 12px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
 h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(48px, 8vw, 86px); line-height: .92; letter-spacing: -.045em; }
 h2 { margin: 0; font-size: 22px; letter-spacing: -.02em; }
@@ -101,11 +105,12 @@ details .field { margin-top: 14px; }
 .text-button { padding: 3px; border: 0; cursor: pointer; color: var(--green); background: transparent; text-decoration: underline; text-underline-offset: 3px; }
 footer { display: flex; justify-content: space-between; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--line); color: #788176; font-size: 12px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-body.busy button, body.busy input, body.busy select { pointer-events: none; }
+body.busy button, body.busy input, body.busy select:not(#languageSelect) { pointer-events: none; }
 
 @media (max-width: 760px) {
   .shell { width: min(100% - 20px, 620px); padding-top: 28px; }
   .hero, .summary-panel { align-items: stretch; flex-direction: column; }
+  .hero-tools { justify-items: start; }
   .status-badge { align-self: flex-start; }
   .choice-grid { grid-template-columns: 1fr 1fr; }
   .split-panel { grid-template-columns: 1fr; gap: 28px; }

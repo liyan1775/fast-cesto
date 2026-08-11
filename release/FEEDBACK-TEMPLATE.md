@@ -7,7 +7,7 @@ Do not include a full local path, Windows username, Epic account information, ga
 
 ## Environment / 环境
 
-- Fast Cesto version: `0.1.0-alpha.1`
+- Fast Cesto version: `0.1.0-alpha.2`
 - Windows: 10 / 11 / other
 - Node.js major version:
 - Game path type: Epic default / spaces / non-ASCII / other

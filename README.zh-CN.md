@@ -1,6 +1,6 @@
 # Fast Cesto
 
-[English](README.md) · [下载公开 Alpha](https://github.com/liyan1775/fast-cesto/releases/tag/v0.1.0-alpha.1) · [提交 Alpha 测试报告](https://github.com/liyan1775/fast-cesto/issues/new?template=alpha-test.yml)
+[English](README.md) · [下载公开 Alpha](https://github.com/liyan1775/fast-cesto/releases/tag/v0.1.0-alpha.2) · [提交 Alpha 测试报告](https://github.com/liyan1775/fast-cesto/issues/new?template=alpha-test.yml)
 
 Fast Cesto 是面向 Windows Epic Games Store 版《Sol Cesto》的免费、开源、非官方 QoL Mod，用于减少重复等待与镜头不适，并始终保留恢复原版的路径。
 
@@ -15,6 +15,7 @@ Fast Cesto 是面向 Windows Epic Games Store 版《Sol Cesto》的免费、开�
 - 未来永久金币收入：`1× / 2× / 3×`
 - 精确版本/哈希检查、自动原版备份、事务中断恢复和一键还原
 - 离线本地 UI 与脱敏诊断报告
+- English / 简体中文界面，可手动切换并记住选择
 
 公开默认配置较保守：基础 `1.5×`、关闭行动 Zoom、金币 `1×`、Turbo 关闭；推荐配置使用未来金币 `2×`。工具不改现有金币、购买扣款、剧情奖励、存档、DRM 或概率规则。
 
@@ -27,7 +28,7 @@ Fast Cesto 是面向 Windows Epic Games Store 版《Sol Cesto》的免费、开�
 安装步骤：
 
 1. 先自行备份《Sol Cesto》存档；Epic 版没有云存档。
-2. 从最新 GitHub Release 下载 `fast-cesto-v0.1.0-alpha.1.zip`，并核对页面上的 SHA-256。
+2. 从最新 GitHub Release 下载 `fast-cesto-v0.1.0-alpha.2.zip`，并核对页面上的 SHA-256。
 3. 解压到普通目录，不要直接在 ZIP 内运行。
 4. 完全关闭游戏，双击 `start-fast-cesto.cmd`。
 5. 查看十项兼容性预检，选择配置并应用。
