@@ -1,0 +1,43 @@
+name: Bug report
+description: Report a reproducible Fast Cesto defect that is not a full Alpha test report.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: Do not upload game files, saves, Epic configuration, usernames, or full local paths. Use private vulnerability reporting for security-sensitive defects.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I used the latest Fast Cesto release on the supported Epic 1.01.3 build.
+          required: true
+        - label: I removed private data and did not attach game resources.
+          required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Non-sensitive environment details
+      description: Fast Cesto version, Windows version, Node major version, path type, DPI, and security product name.
+    validations:
+      required: true

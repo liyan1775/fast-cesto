@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-node-20:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check JavaScript syntax
+        shell: pwsh
+        run: Get-ChildItem tools -Filter *.mjs | ForEach-Object { node --check $_.FullName }
+      - name: Run game-independent tests
+        shell: pwsh
+        run: |
+          node tools/test-fast-cesto.mjs
+          node tools/test-diagnostics.mjs
+          node tools/test-preflight.mjs
+          node tools/test-transaction-recovery.mjs
+          node tools/test-ui-server.mjs
+      - name: Build and audit release bundle
+        shell: pwsh
+        run: |
+          node tools/build-release.mjs
+          node tools/test-release-bundle.mjs

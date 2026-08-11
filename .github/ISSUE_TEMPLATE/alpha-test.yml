@@ -1,0 +1,103 @@
+name: Alpha test report
+description: Report a successful or unsuccessful test on a supported Epic Games Store installation.
+title: "[Alpha test]: "
+labels:
+  - testing
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for testing. Do **not** include game files, saves, Epic configuration, a Windows username, or a full local path. Inspect diagnostic JSON before attaching it.
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: I legally own Sol Cesto on Epic Games Store, backed up my save, and used game version 1.01.3.
+          required: true
+        - label: I removed personal paths and account information from this report and its attachments.
+          required: true
+  - type: dropdown
+    id: windows
+    attributes:
+      label: Windows version
+      options:
+        - Windows 11
+        - Windows 10
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: node
+    attributes:
+      label: Node.js version
+      placeholder: "For example: 20.19.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: path
+    attributes:
+      label: Game path type
+      options:
+        - Epic default
+        - Custom path with spaces
+        - Custom path with non-ASCII characters
+        - Other custom path
+    validations:
+      required: true
+  - type: dropdown
+    id: dpi
+    attributes:
+      label: Display scaling
+      options:
+        - 100%
+        - 125%
+        - 150%
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: security
+    attributes:
+      label: Security software (optional)
+      description: Product name only; do not include account details.
+      placeholder: Windows Defender
+  - type: dropdown
+    id: roundtrip
+    attributes:
+      label: Install → Epic launch → restore → Epic launch
+      options:
+        - Passed all steps
+        - Install failed
+        - Modded game launch failed
+        - Restore failed
+        - Restored game launch failed
+        - Not tested
+    validations:
+      required: true
+  - type: textarea
+    id: features
+    attributes:
+      label: Feature results
+      description: Report base speed, movement zoom, normal/special gold, Turbo press/release, pause, scene transition, Alt+Tab, audio, input, overlay, and achievements where tested.
+      placeholder: |
+        Base speed: Passed
+        Movement zoom: Passed
+        Normal gold 2x: Passed
+        Special/death gold: Not tested
+        Turbo press/release: Passed
+        Turbo pause/scene/Alt+Tab: ...
+    validations:
+      required: true
+  - type: textarea
+    id: experience
+    attributes:
+      label: Play length and overall experience
+      description: Include approximate play time or Run progress and whether the pacing felt better.
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problems or additional notes
+      description: Give reproduction steps, expected result, actual result, and workarounds. Attach only privacy-checked diagnostics/screenshots.

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="fast-cesto-token" content="__FAST_CESTO_SESSION_TOKEN__">
+  <title>Fast Cesto</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">SOL CESTO · EPIC 1.01.3</p>
+        <h1>Fast Cesto</h1>
+        <p class="subtitle">本地、可恢复的节奏与进度 QoL 配置工具</p>
+      </div>
+      <div id="statusBadge" class="status-badge unknown"><span></span>正在检查</div>
+    </header>
+
+    <section class="notice" aria-label="隐私说明">
+      <strong>所有处理均在本机完成。</strong> 工具不会联网、读取存档或上传游戏文件；安装前请关闭游戏。
+    </section>
+
+    <section class="panel paths-panel">
+      <div class="section-heading">
+        <div>
+          <p class="step">01 · 位置</p>
+          <h2>确认游戏目录</h2>
+        </div>
+        <button id="refreshButton" class="button ghost" type="button">刷新状态</button>
+      </div>
+      <label class="field">
+        <span>SolCesto 目录</span>
+        <input id="gameDirectory" type="text" spellcheck="false" autocomplete="off">
+        <small>目录内应包含 <code>SolCesto.exe</code> 和 <code>www\assets.dat</code></small>
+      </label>
+      <details>
+        <summary>高级：备份与状态目录</summary>
+        <label class="field compact">
+          <span>状态目录</span>
+          <input id="stateDirectory" type="text" spellcheck="false" autocomplete="off">
+        </label>
+      </details>
+      <div class="preflight-box">
+        <div class="preflight-heading">
+          <div>
+            <b>Alpha 兼容性预检</b>
+            <small>只读检查版本、权限、空间、备份和游戏进程</small>
+          </div>
+          <output id="preflightStatus" class="preflight-status pending">等待检查</output>
+        </div>
+        <ul id="preflightChecks" class="preflight-checks"><li class="pending"><span></span>正在收集环境信息…</li></ul>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading">
+        <div>
+          <p class="step">02 · 体验</p>
+          <h2>选择基础节奏</h2>
+        </div>
+        <output id="effectiveSpeed" class="metric">1.5×</output>
+      </div>
+      <fieldset class="choice-grid" id="speedChoices">
+        <legend class="sr-only">基础速度</legend>
+        <label><input type="radio" name="speed" value="1"><span><b>1×</b><small>原版</small></span></label>
+        <label><input type="radio" name="speed" value="1.25"><span><b>1.25×</b><small>温和</small></span></label>
+        <label><input type="radio" name="speed" value="1.5" checked><span><b>1.5×</b><small>推荐</small></span></label>
+        <label><input type="radio" name="speed" value="2"><span><b>2×</b><small>快速</small></span></label>
+      </fieldset>
+      <label class="switch-row">
+        <span><b>关闭行动镜头 Zoom</b><small>只移除行动时反复放大的镜头 Tween</small></span>
+        <input id="disableMovementZoom" type="checkbox" checked>
+      </label>
+    </section>
+
+    <section class="panel split-panel">
+      <div>
+        <p class="step">03 · 进度</p>
+        <h2>永久金币倍率</h2>
+        <p class="hint">只影响未来获得的永久金币，不修改已有余额或购买价格。</p>
+        <fieldset class="segmented">
+          <legend class="sr-only">金币倍率</legend>
+          <label><input type="radio" name="gold" value="1"><span>1×</span></label>
+          <label><input type="radio" name="gold" value="2" checked><span>2× 推荐</span></label>
+          <label><input type="radio" name="gold" value="3"><span>3×</span></label>
+        </fieldset>
+      </div>
+      <div class="turbo-block">
+        <div class="inline-heading">
+          <div>
+            <p class="step">04 · 临时加速</p>
+            <h2>按住 Turbo</h2>
+          </div>
+          <input id="turboEnabled" class="toggle" type="checkbox">
+        </div>
+        <div id="turboSettings" class="turbo-settings disabled">
+          <label class="field compact"><span>按键</span><select id="turboKey"><option value="ShiftLeft">左 Shift</option><option value="ShiftRight">右 Shift</option></select></label>
+          <label class="field compact"><span>额外乘数</span><select id="turboMultiplier"><option value="1.5">1.5×</option><option value="2" selected>2×</option><option value="3">3×</option></select></label>
+        </div>
+      </div>
+    </section>
+
+    <section class="summary-panel">
+      <div>
+        <p class="step">05 · 应用</p>
+        <h2 id="summaryTitle">基础 1.5× · 金币 2× · Turbo 关闭</h2>
+        <p id="summaryDetail">行动 Zoom 将关闭；可随时精确恢复原版。</p>
+      </div>
+      <div class="actions">
+        <label class="confirm"><input id="gameClosed" type="checkbox">我已关闭游戏</label>
+        <button id="applyButton" class="button primary" type="button" disabled>应用配置</button>
+        <button id="restoreButton" class="button danger" type="button">恢复原版</button>
+      </div>
+    </section>
+
+    <section class="activity" aria-live="polite">
+      <div><span id="activityDot" class="activity-dot"></span><strong id="activityTitle">准备就绪</strong></div>
+      <p id="activityMessage">正在读取当前安装状态。</p>
+      <button id="diagnosticButton" class="text-button" type="button">下载脱敏诊断报告</button>
+    </section>
+
+    <footer>
+      <span>Fast Cesto Internal Alpha · 非官方工具</span>
+      <button id="shutdownButton" class="text-button" type="button">关闭工具</button>
+    </footer>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 2,
+  "gameVersion": "1.01.3",
+  "speed": 1.5,
+  "disableMovementZoom": true,
+  "goldMultiplier": 2,
+  "turbo": {
+    "enabled": true,
+    "key": "ShiftLeft",
+    "multiplier": 2
+  }
+}

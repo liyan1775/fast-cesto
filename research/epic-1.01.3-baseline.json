@@ -1,0 +1,202 @@
+{
+  "capturedAt": "2026-08-11",
+  "store": "Epic Games Store",
+  "platform": "Windows",
+  "gameVersion": "1.01.3",
+  "wrapper": "Construct 3 Windows WebView2",
+  "files": {
+    "SolCesto.exe": {
+      "bytes": 610816,
+      "sha256": "663268E19D05FA3502FB2574899ACF7EC088CAA8F0740960D3D8010E9F24C68C",
+      "authenticode": "NotSigned"
+    },
+    "www/assets.dat": {
+      "bytes": 235195527,
+      "sha256": "EAFD1E359A0804D28F174D6ECADB587BF44CC849A74839F06ABDBF4CAB88B5DD"
+    },
+    "package.json": {
+      "bytes": 1779,
+      "sha256": "0F9BEEC1E057277D2BD0F226426392C688D882965DAE09AEB8BF0DE47016A957",
+      "note": "Contains Epic client configuration. Do not publish its contents."
+    }
+  },
+  "archive": {
+    "format": "c3ab",
+    "entryCount": 1010,
+    "directoryOffset": 16,
+    "directorySize": 66324,
+    "blobOffset": 66364,
+    "blobSize": 235129163,
+    "compressedEntries": 0,
+    "noopRepackByteIdentical": true
+  },
+  "patchTargets": {
+    "scripts/c3runtime.js": {
+      "originalSha256": "E6EC7BF9B4E8B1C00A9B3F96387B691A70BBA6EC2D2CAF42D409C54CC739AB32"
+    },
+    "data.json": {
+      "originalSha256": "57D83801624B4175D2C8647654FC6092E9C6001924E34772B154C76A8E6DA3B2"
+    }
+  },
+  "prototypeV1": {
+    "settings": {
+      "speed": 1.5,
+      "disableMovementZoom": true
+    },
+    "assetsSha256": "C4C87A93BC618FC31FAAF0F66A7666CE17BA33539767F135EDE9B1E42D96A42D",
+    "changedEntryCount": 2
+  },
+  "prototypeGold2": {
+    "settings": {
+      "speed": 1.5,
+      "disableMovementZoom": true,
+      "goldMultiplier": 2
+    },
+    "assetsSha256": "DFA2A1CB450B04EEC80B5A27BD1B677255C5CBD1175DB43F20985F1D319F2EA1",
+    "dataSha256": "19CDE9242F7C2E388A04BB53FCCCB1B4D2D93416B0967E50D754A4B592148E00",
+    "goldTargetActionCount": 20,
+    "goldCloneActionCount": 20,
+    "changedEntryCount": 2,
+    "dynamicGoldSettlementVerified": true,
+    "dynamicGoldSettlementEvidence": "User confirmed one normal permanent-gold settlement increased the balance by 2x through the internal-alpha build, whose data.json payload is identical to this prototype. Other settlement branches remain unverified."
+  },
+  "internalAlphaPatcher": {
+    "configSchemaVersion": 2,
+    "patchImplementationVersion": 4,
+    "recommendedOutputMatchesPrototypeGold2": false,
+    "recommendedOutput": {
+      "assetsSha256": "16D4EBF30044D3E5F2A3B3C401F114E35F683AEA37E17F9DA2B3581806976FB3",
+      "runtimeSha256": "D53E220BAEF05DECAF1973BD6375022B5FDB9F1BA04B8912776E4DF8F184CDBA",
+      "dataSha256": "19CDE9242F7C2E388A04BB53FCCCB1B4D2D93416B0967E50D754A4B592148E00",
+      "differenceFromPrototypeGold2": "Runtime now stores the base time scale in full C3 state and reapplies the mod layer exactly once on load. Gold data is unchanged."
+    },
+    "alternateConfigurationTest": {
+      "settings": {
+        "speed": 1.25,
+        "disableMovementZoom": false,
+        "goldMultiplier": 3
+      },
+      "assetsSha256": "C5F512F4707AF4D0DC21BCC81A3FD5AC5098EF89719493F0BA4F1DE20781A7D0"
+    },
+    "verifiedFlows": [
+      "same-config-idempotence",
+      "installed-to-reconfigured",
+      "restore-to-byte-identical-original",
+      "restore-then-reinstall",
+      "unknown-archive-refusal-without-mutation",
+      "full-archive-turbo-to-recommended-to-original-to-turbo",
+      "running-game-refusal-without-mutation"
+    ],
+    "currentInstalledConfiguration": {
+      "name": "turbo-preview",
+      "assetsSha256": "729C05865A08735532984FD40F08FAE5ABD9FAF78FA2C17C61DF2F131AA765B6",
+      "backupValid": true
+    },
+    "turboPreview": {
+      "settings": {
+        "speed": 1.5,
+        "key": "ShiftLeft",
+        "turboMultiplier": 2,
+        "disableMovementZoom": true,
+        "goldMultiplier": 2
+      },
+      "assetsSha256": "729C05865A08735532984FD40F08FAE5ABD9FAF78FA2C17C61DF2F131AA765B6",
+      "runtimeSha256": "1E99B6D7092C5C9D00E1D25D8890EB471ABD5C8CEA40D8EDA91402E4579B9254",
+      "dynamicChecks": [
+        "keydown-off-to-on",
+        "keyup-on-to-off",
+        "window-blur-forces-off",
+        "unconfigured-right-shift-remains-off"
+      ],
+      "gameplayActivationVerifiedByUser": true,
+      "gameplayPauseAndSceneTransitionVerified": false
+    },
+    "baseTimeScaleSaveLoadPatch": {
+      "saveStoresBaseTimeScale": true,
+      "loadAppliesModLayerOnce": true,
+      "turboLoadResetsActiveState": true,
+      "startupSmokeVerified": true
+    },
+    "transactionSafety": {
+      "journalSchemaVersion": 1,
+      "journalWrittenBeforeFirstRename": true,
+      "recoveryUsesObservedHashes": true,
+      "operationLock": true,
+      "staleLockRecoveryVerified": true,
+      "runningGameRefusalVerified": true,
+      "freeSpacePreflightVerified": true,
+      "orphanStageCleanupVerified": true,
+      "unjournaledSwapFailsClosed": true,
+      "isolatedRecoveryCasesPassed": [
+        "install-prepared-rolls-back",
+        "install-old-archive-moved-rolls-back",
+        "install-new-archive-only-commits",
+        "install-committed-not-cleaned-commits",
+        "first-install-new-archive-commits",
+        "restore-committed-commits",
+        "restore-old-archive-moved-rolls-back",
+        "unsafe-journal-rejected"
+      ],
+      "physicalPowerCutTestPerformed": false
+    },
+    "diagnostics": {
+      "schemaVersion": 1,
+      "operationLogFormat": "ndjson",
+      "rotationBytes": 524288,
+      "pathAndErrorStackOmitted": true,
+      "diagnosticFieldAllowlist": true,
+      "privacyRegressionTestPassed": true,
+      "preflightTextAndPathsOmitted": true
+    },
+    "preflight": {
+      "schemaVersion": 1,
+      "checkCount": 10,
+      "checks": [
+        "NODE_RUNTIME",
+        "GAME_LAYOUT",
+        "SUPPORTED_ARCHIVE",
+        "ORIGINAL_BACKUP",
+        "GAME_PROCESS",
+        "GAME_DIRECTORY_WRITE",
+        "GAME_DIRECTORY_SPACE",
+        "STATE_DIRECTORY_WRITE",
+        "STATE_DIRECTORY_SPACE",
+        "TEMP_DIRECTORY_SPACE"
+      ],
+      "currentMachineReadyToInstall": true,
+      "pathChangeRevokesUiInstallPermission": true,
+      "refreshRequiredToReauthorize": true
+    },
+    "localUi": {
+      "bindAddress": "127.0.0.1",
+      "randomPort": true,
+      "hostOriginAndSessionTokenChecks": true,
+      "requestBodyLimitBytes": 32768,
+      "shellInvocationUsed": false,
+      "browserChecks": [
+        "current-config-loaded",
+        "close-game-confirmation-gates-apply",
+        "same-config-apply-is-idempotent",
+        "configuration-summary-and-effective-speed-update",
+        "ten-preflight-checks-visible-and-passing",
+        "preflight-gates-apply-after-path-change",
+        "turbo-disabled-state",
+        "390px-responsive-layout-without-horizontal-overflow",
+        "no-browser-console-warnings-or-errors"
+      ]
+    },
+    "releaseCandidate": {
+      "version": "0.1.0-alpha.1",
+      "requiresNodeMajorAtLeast": 20,
+      "payloadFileCount": 20,
+      "zipBytes": 42517,
+      "zipSha256": "FBDE8E1801B432829AD4DBF030F40B84081AAA7817FA208FCFF35B1F43EEB312",
+      "gameResourcesIncluded": false,
+      "allowlistAndSecretAuditPassed": true,
+      "alphaTestingProtocolIncluded": true,
+      "feedbackTemplateIncluded": true,
+      "unicodeAndSpaceExtractionPathVerified": true,
+      "crossMachineAlphaCompleted": false
+    }
+  }
+}

@@ -1,0 +1,28 @@
+# The user's licensed Epic installation is input data, never repository content.
+/SolCesto/
+
+# Generated archives, backups, test output, and local analysis scratch space.
+/build/
+/backups/
+/dist/
+/.scratch/
+*.bak
+*.tmp
+*.log
+*.dat
+*.exe
+*.dll
+operations.ndjson
+install-state.json
+transaction.json
+operation.lock
+
+# Local credentials and environment overrides must never be committed.
+.env
+.env.*
+!.env.example
+
+# Common tool noise.
+node_modules/
+.DS_Store
+Thumbs.db
