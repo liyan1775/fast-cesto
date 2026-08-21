@@ -1,28 +1,29 @@
 # Fast Cesto
 
-[简体中文](README.zh-CN.md) · [Download the public Alpha](https://github.com/liyan1775/fast-cesto/releases/tag/v0.1.0-alpha.2) · [Report an Alpha test](https://github.com/liyan1775/fast-cesto/issues/new?template=alpha-test.yml)
+[简体中文](README.zh-CN.md) · [Download the public Alpha](https://github.com/liyan1775/fast-cesto/releases/tag/v0.2.0-alpha.1) · [Report an Alpha test](https://github.com/liyan1775/fast-cesto/issues/new?template=alpha-test.yml)
 
 Fast Cesto is a free, open-source, unofficial quality-of-life mod for the Windows Epic Games Store version of **Sol Cesto**. It reduces repeated waiting and camera motion while keeping the original game files recoverable.
 
 > [!WARNING]
-> This is a public Alpha, not a stable release. It currently supports only the exact Epic Games Store Windows `1.01.3` build. Back up your save before testing.
+> This is a public Alpha, not a stable release. It supports only the exact Epic Games Store Windows `1.01.4b` build (internal project version `1.01.4`). Back up your save before testing.
 
 ## Features
 
 - Base game-speed choices: `1×`, `1.25×`, `1.5×`, or `2×`
 - Optional hold-to-activate Turbo using left or right Shift
+- Optional hold-to-activate Focus using left or right Ctrl at `0.5×`, `0.75×`, or `1×`
 - Optional removal of the repeated camera zoom during movement
 - Future permanent-gold income multiplier: `1×`, `2×`, or `3×`
 - Exact build/hash checks, automatic original-file backup, transactional recovery, and one-click restore
 - Offline local UI and privacy-filtered diagnostic reports
 - English and Simplified Chinese UI with a remembered language choice
 
-The public default is conservative: `1.5×` speed, movement zoom disabled, gold at `1×`, and Turbo disabled. The recommended preset uses `2×` future gold. Existing balances, purchases, story rewards, saves, DRM, and probability rules are not modified.
+The public default is conservative: `1.5×` speed, movement zoom disabled, gold at `1×`, and Turbo/Focus disabled. The recommended preset uses `2×` future gold. Existing balances, purchases, story rewards, saves, DRM, and probability rules are not modified.
 
 ## Requirements
 
 - A legally owned Epic Games Store copy of Sol Cesto for Windows
-- Game version `1.01.3` with the exact supported archive hash
+- Game version `1.01.4b` with the exact supported archive hash
 - [Node.js 20 or newer](https://nodejs.org/)
 
 Steam and unknown game builds are intentionally rejected instead of being modified.
@@ -30,7 +31,7 @@ Steam and unknown game builds are intentionally rejected instead of being modifi
 ## Install and restore
 
 1. Back up your Sol Cesto save. The game does not provide cloud saves on Epic.
-2. Download `fast-cesto-v0.1.0-alpha.2.zip` from the latest GitHub Release and verify its SHA-256 shown on that page.
+2. Download `fast-cesto-v0.2.0-alpha.1.zip` from the latest GitHub Release and verify its SHA-256 shown on that page.
 3. Extract the ZIP to a normal folder; do not run it inside the archive.
 4. Fully close Sol Cesto, then double-click `start-fast-cesto.cmd`.
 5. Review the ten compatibility checks, choose a preset, and apply it.
@@ -40,7 +41,7 @@ To uninstall, close the game, start Fast Cesto again, and choose **Restore origi
 
 ## Alpha testers wanted
 
-We especially need Epic `1.01.3` testers covering Windows 10/11, default and custom install paths, non-ASCII paths, different display scaling, and different security software. Please follow [the Alpha protocol](release/ALPHA-TESTING.md) and submit the [structured Alpha report](https://github.com/liyan1775/fast-cesto/issues/new?template=alpha-test.yml).
+We especially need Epic `1.01.4b` testers covering Windows 10/11, default and custom install paths, non-ASCII paths, different display scaling, and different security software. Please follow [the Alpha protocol](release/ALPHA-TESTING.md) and submit the [structured Alpha report](https://github.com/liyan1775/fast-cesto/issues/new?template=alpha-test.yml).
 
 Do not attach game files, saves, Epic configuration, usernames, or full local paths. The diagnostic report is filtered, but inspect it before uploading.
 
@@ -64,6 +65,13 @@ node tools/test-transaction-recovery.mjs
 node tools/test-ui-server.mjs
 node tools/build-release.mjs
 node tools/test-release-bundle.mjs
+```
+
+Exact-build hazard timing audit (requires the registered backup from your own legally owned Epic `1.01.4b` copy):
+
+```powershell
+node tools/audit-build-compatibility.mjs backups/epic-1.01.4b/assets.dat
+node tools/test-hazard-timing.mjs
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) before sending changes.

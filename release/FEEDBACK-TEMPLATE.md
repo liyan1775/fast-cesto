@@ -7,7 +7,8 @@ Do not include a full local path, Windows username, Epic account information, ga
 
 ## Environment / 环境
 
-- Fast Cesto version: `0.1.0-alpha.2`
+- Fast Cesto version: `0.2.0-alpha.1`
+- Sol Cesto version: Epic `1.01.4b`
 - Windows: 10 / 11 / other
 - Node.js major version:
 - Game path type: Epic default / spaces / non-ASCII / other
@@ -27,6 +28,11 @@ Do not include a full local path, Windows username, Epic account information, ga
 - Death/special/deposit/sale gold: passed / failed / not tested
 - Turbo press/release: passed / failed / not tested
 - Turbo pause/scene/Alt+Tab: passed / failed / not tested
+- Focus press/release at `0.5×`: passed / failed / not tested
+- Focus + Turbo overlap: passed / failed / not tested
+- Fourth-area natural bomb/wall-hand-trap encounter feel (optional): passed / issue observed / not encountered
+- Focus pause/scene/Alt+Tab and stuck-slow check: passed / failed / not tested
+- Ctrl key conflict: none / observed / not tested
 - Audio, input, Epic overlay, and achievements:
 - Play length or Run progress:
 

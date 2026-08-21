@@ -20,12 +20,13 @@ const root = mkdtempSync(join(tmpdir(), "fast-cesto-diagnostics-"));
 const privatePath = join(root, "Users", "tester", "Epic", "secret");
 try {
   const config = {
-    schemaVersion: 2,
-    gameVersion: "1.01.3",
+    schemaVersion: 3,
+    gameVersion: "1.01.4b",
     speed: 1.5,
     disableMovementZoom: true,
     goldMultiplier: 2,
     turbo: { enabled: true, key: "ShiftLeft", multiplier: 2 },
+    focus: { enabled: true, key: "ControlLeft", targetSpeed: 0.5 },
     ignoredPrivatePath: privatePath,
   };
   requireEqual(recordOperation(root, {
@@ -34,7 +35,7 @@ try {
     outcome: "success",
     result: "installed",
     durationMs: 42.4,
-    gameVersion: "1.01.3",
+    gameVersion: "1.01.4b",
     currentSha256: "A".repeat(64),
     configuration: config,
     recovery: { result: "none" },
@@ -72,7 +73,7 @@ try {
     status: {
       state: "installed",
       currentSha256: "B".repeat(64),
-      gameVersion: "1.01.3",
+      gameVersion: "1.01.4b",
       backupValid: true,
       backupSha256: "C".repeat(64),
       stateManifestValid: true,
@@ -89,6 +90,8 @@ try {
   requireEqual(serialized.includes(privatePath), false, "private path omitted");
   requireEqual(report.privacy.pathsIncluded, false, "privacy declaration");
   requireEqual(report.status.activeConfig.turbo.key, "ShiftLeft", "config retained");
+  requireEqual(report.status.activeConfig.focus.key, "ControlLeft", "Focus config retained");
+  requireEqual(report.status.activeConfig.focus.targetSpeed, 0.5, "Focus speed retained");
   requireEqual(report.preflight.blockingIssueIds.length, 1, "preflight id whitelist");
   requireEqual(report.preflight.checks[0].running, true, "preflight boolean retained");
   requireEqual(report.preflight.checks[0].summary, undefined, "preflight text omitted");

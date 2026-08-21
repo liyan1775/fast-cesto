@@ -107,10 +107,25 @@ try {
       disableMovementZoom: true,
       goldMultiplier: 2,
       turbo: { enabled: false, key: "ShiftLeft", multiplier: 2 },
+      focus: { enabled: true, key: "ControlLeft", targetSpeed: 0.5 },
     },
   });
   requireEqual(invalidInstall.status, 400, "invalid install status");
   requireEqual(readFileSync(assetsPath, "utf8"), before, "invalid install leaves archive unchanged");
+
+  const invalidFocusInstall = await post(origin, token, "/api/install", {
+    gameDirectory,
+    stateDirectory,
+    settings: {
+      speed: 1.5,
+      disableMovementZoom: true,
+      goldMultiplier: 2,
+      turbo: { enabled: true, key: "ShiftLeft", multiplier: 2 },
+      focus: { enabled: true, key: "ControlLeft", targetSpeed: 0.6 },
+    },
+  });
+  requireEqual(invalidFocusInstall.status, 400, "invalid Focus install status");
+  requireEqual(readFileSync(assetsPath, "utf8"), before, "invalid Focus leaves archive unchanged");
 
   const diagnostic = await post(origin, token, "/api/diagnostic", { gameDirectory, stateDirectory });
   const reportText = await diagnostic.text();

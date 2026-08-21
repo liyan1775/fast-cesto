@@ -1,6 +1,6 @@
-# Fast Cesto v0.1.0-alpha.2
+# Fast Cesto v0.2.0-alpha.1
 
-Fast Cesto is an unofficial QoL patcher for the exact Epic Games Store Windows `1.01.3` build of **Sol Cesto**.
+Fast Cesto is an unofficial QoL patcher for the exact Epic Games Store Windows `1.01.4b` build of **Sol Cesto** (internal project version `1.01.4`).
 
 > Public Alpha: back up your save before testing. This is not a stable release.
 
@@ -22,6 +22,7 @@ https://github.com/liyan1775/fast-cesto/issues/new?template=alpha-test.yml
 
 - Base speed: `1× / 1.25× / 1.5× / 2×`
 - Optional hold-to-activate Turbo using left or right Shift
+- Optional hold-to-activate Focus using left or right Ctrl at `0.5× / 0.75× / 1×`
 - Optional removal of the repeated movement camera zoom
 - Future permanent-gold income: `1× / 2× / 3×`
 - Verified backup, interrupted-operation recovery, and exact original restore
@@ -32,9 +33,10 @@ The local UI listens only on `127.0.0.1`. Fast Cesto does not connect to the int
 
 ## Limits
 
-- Epic Games Store Windows `1.01.3` only; Steam and unknown hashes are rejected.
+- Epic Games Store Windows `1.01.4b` only; Steam, the previous `1.01.3` build, and unknown hashes are rejected.
 - Node.js 20+ is currently required.
-- Turbo pause/scene transitions and special/death gold paths need more gameplay coverage.
+- Focus is a preview feature. Exact-build automation verifies the fourth-area bomb and wall/hand-trap deadline clocks; real-encounter input and audio feel still need broader coverage.
+- Turbo/Focus pause and scene transitions, plus special/death gold paths, need more gameplay coverage.
 - Inspect diagnostic JSON before uploading it, even though fields are allowlisted.
 
 Unofficial. Not affiliated with or endorsed by the developers or publishers. Requires a legally owned copy of Sol Cesto.
@@ -43,10 +45,10 @@ Unofficial. Not affiliated with or endorsed by the developers or publishers. Req
 
 ## 简体中文
 
-Fast Cesto 是只支持 Epic Games Store Windows `1.01.3` 精确构建的非官方《Sol Cesto》QoL 补丁器。这是公开 Alpha，请先备份存档。
+Fast Cesto 是只支持 Epic Games Store Windows `1.01.4b` 精确构建（归档内部项目版本 `1.01.4`）的非官方《Sol Cesto》QoL 补丁器。这是公开 Alpha，请先备份存档。
 
 使用步骤：安装 Node.js 20+；自行备份存档；完全关闭游戏；双击 `start-fast-cesto.cmd`；查看全部兼容性检查并应用配置；然后从 Epic 正常启动。卸载时关闭游戏并选择“恢复原版”。
 
-功能包括基础速度、Shift Turbo、关闭行动 Zoom、未来永久金币倍率、自动备份/中断恢复/精确还原，以及脱敏诊断。页面顶部可在 English / 简体中文之间切换并记住选择。工具不联网、不上传文件、不读取存档，也不在 ZIP 中包含任何游戏归档、EXE、DLL、Epic SDK、凭据或存档。
+功能包括基础速度、Shift Turbo、Ctrl 按住减速（Focus）、关闭行动 Zoom、未来永久金币倍率、自动备份/中断恢复/精确还原，以及脱敏诊断。页面顶部可在 English / 简体中文之间切换并记住选择。Focus 目前仍是预览功能；精确构建自动审计已确认第四区域炸弹怪和手墙陷阱的有效判定随游戏时间减速，真实遭遇时的按键和音频手感仍需更多覆盖。工具不联网、不上传文件、不读取存档，也不在 ZIP 中包含任何游戏归档、EXE、DLL、Epic SDK、凭据或存档。
 
 请先阅读 `ALPHA-TESTING.md`，再通过上述 GitHub Issue 表单反馈。不要上传游戏文件、存档、Epic 配置、用户名或完整路径。

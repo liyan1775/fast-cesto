@@ -2,6 +2,19 @@
 
 All notable public changes are recorded here.
 
+## [Unreleased]
+
+## [0.2.0-alpha.1] - 2026-08-21
+
+- Updated exact-build support to the Epic client `1.01.4b` update (internal project version `1.01.4`) while continuing to reject unknown and previous archives.
+- Added a read-only build-compatibility audit covering all 16 speed/Turbo/Focus combinations and all 6 Zoom/gold combinations.
+- Added optional hold-to-activate Focus using left or right Ctrl with absolute `0.5×`, `0.75×`, or `1×` target speeds.
+- Defined Focus as higher priority than Turbo and reset both temporary states on blur, suspend, and load.
+- Added automatic schema v2 to v3 configuration migration with Focus disabled for existing users.
+- Added bilingual Focus controls, configuration summaries, diagnostics, and a dedicated preview preset.
+- Added runtime, migration, overlap, UI, diagnostic, and release-bundle regression coverage.
+- Added an exact-build hazard timing audit proving that both the fourth-area bomb timer and wall/hand-trap deadline use scaled game time.
+
 ## [0.1.0-alpha.2] - 2026-08-11
 
 - Added a visible English / Simplified Chinese language selector.

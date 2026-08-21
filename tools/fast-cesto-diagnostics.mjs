@@ -69,6 +69,13 @@ export function sanitizeConfiguration(config) {
         ? config.turbo.multiplier
         : null,
     },
+    focus: {
+      enabled: typeof config.focus?.enabled === "boolean" ? config.focus.enabled : null,
+      key: ["ControlLeft", "ControlRight"].includes(config.focus?.key) ? config.focus.key : null,
+      targetSpeed: typeof config.focus?.targetSpeed === "number"
+        ? config.focus.targetSpeed
+        : null,
+    },
   };
 }
 

@@ -24,7 +24,7 @@ const DEFAULT_GAME_DIRECTORY = resolve(process.argv[2] && !process.argv[2].start
   : join(ROOT, "SolCesto"));
 const DEFAULT_STATE_DIRECTORY = resolve(process.argv[3] && !process.argv[3].startsWith("--")
   ? process.argv[3]
-  : join(ROOT, "backups", "epic-1.01.3"));
+  : join(ROOT, "backups", "epic-1.01.4b"));
 const noOpen = process.argv.includes("--no-open");
 const requestedPortIndex = process.argv.indexOf("--port");
 const requestedPort = requestedPortIndex >= 0 ? Number(process.argv[requestedPortIndex + 1]) : 0;
@@ -114,9 +114,18 @@ function validateSettings(value) {
   if (![1.5, 2, 3].includes(value.turbo.multiplier)) {
     throw new Error("Unsupported Turbo multiplier");
   }
+  if (typeof value.focus?.enabled !== "boolean") {
+    throw new Error("Focus enabled setting must be true or false");
+  }
+  if (!["ControlLeft", "ControlRight"].includes(value.focus.key)) {
+    throw new Error("Unsupported Focus key");
+  }
+  if (![0.5, 0.75, 1].includes(value.focus.targetSpeed)) {
+    throw new Error("Unsupported Focus target speed");
+  }
   return {
-    schemaVersion: 2,
-    gameVersion: "1.01.3",
+    schemaVersion: 3,
+    gameVersion: "1.01.4b",
     speed: value.speed,
     disableMovementZoom: value.disableMovementZoom,
     goldMultiplier: value.goldMultiplier,
@@ -124,6 +133,11 @@ function validateSettings(value) {
       enabled: value.turbo.enabled,
       key: value.turbo.key,
       multiplier: value.turbo.multiplier,
+    },
+    focus: {
+      enabled: value.focus.enabled,
+      key: value.focus.key,
+      targetSpeed: value.focus.targetSpeed,
     },
   };
 }

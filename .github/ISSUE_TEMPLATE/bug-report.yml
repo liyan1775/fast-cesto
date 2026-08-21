@@ -12,7 +12,7 @@ body:
     attributes:
       label: Checks
       options:
-        - label: I used the latest Fast Cesto release on the supported Epic 1.01.3 build.
+        - label: I used the latest Fast Cesto release on the supported Epic 1.01.4b build.
           required: true
         - label: I removed private data and did not attach game resources.
           required: true

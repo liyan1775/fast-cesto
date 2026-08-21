@@ -83,10 +83,14 @@ details .field { margin-top: 14px; }
 .segmented { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 18px; padding: 5px; border: 0; border-radius: 12px; background: #101410; }
 .segmented span { display: block; padding: 10px; border-radius: 8px; text-align: center; color: var(--muted); font-weight: 700; }
 .segmented input:checked + span { background: var(--panel-2); color: var(--green); }
-.turbo-block { padding-left: 34px; border-left: 1px solid var(--line); }
+.temporary-speed-block { padding-left: 34px; border-left: 1px solid var(--line); }
+.temporary-control { padding: 14px 0 18px; }
+.temporary-control + .temporary-control { padding-top: 20px; border-top: 1px solid var(--line); }
+.temporary-control .inline-heading { margin-bottom: 14px; }
+.control-help { max-width: 34ch; margin: 5px 0 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
 .toggle { flex: 0 0 auto; }
-.turbo-settings { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; transition: opacity .2s; }
-.turbo-settings.disabled { opacity: .38; pointer-events: none; }
+.temporary-settings { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; transition: opacity .2s; }
+.temporary-settings.disabled { opacity: .38; pointer-events: none; }
 .summary-panel { display: flex; align-items: center; justify-content: space-between; gap: 30px; margin-top: 16px; padding: 28px; border: 1px solid #465b2e; border-radius: 20px; background: linear-gradient(135deg, #202c17, #171d16); box-shadow: var(--shadow); }
 .summary-panel h2 { max-width: 34ch; }
 .summary-panel p:last-child { margin-bottom: 0; color: var(--muted); }
@@ -114,7 +118,7 @@ body.busy button, body.busy input, body.busy select:not(#languageSelect) { point
   .status-badge { align-self: flex-start; }
   .choice-grid { grid-template-columns: 1fr 1fr; }
   .split-panel { grid-template-columns: 1fr; gap: 28px; }
-  .turbo-block { padding: 28px 0 0; border-left: 0; border-top: 1px solid var(--line); }
+  .temporary-speed-block { padding: 28px 0 0; border-left: 0; border-top: 1px solid var(--line); }
   .actions { min-width: 0; }
   .preflight-heading { align-items: flex-start; flex-direction: column; }
   .preflight-checks { grid-template-columns: 1fr; }

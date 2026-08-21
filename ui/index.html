@@ -11,7 +11,7 @@
   <main class="shell">
     <header class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">SOL CESTO · EPIC 1.01.3</p>
+        <p class="eyebrow">SOL CESTO · EPIC 1.01.4b</p>
         <h1>Fast Cesto</h1>
         <p class="subtitle" data-i18n="app.subtitle">Local, recoverable pacing and progression QoL configurator</p>
       </div>
@@ -97,17 +97,30 @@
           <label><input type="radio" name="gold" value="3"><span>3×</span></label>
         </fieldset>
       </div>
-      <div class="turbo-block">
-        <div class="inline-heading">
-          <div>
-            <p class="step" data-i18n="step.turbo">04 · Temporary speed</p>
+      <div class="temporary-speed-block">
+        <p class="step" data-i18n="step.turbo">04 · Temporary speed</p>
+        <div class="temporary-control">
+          <div class="inline-heading">
             <h2 data-i18n="heading.turbo">Hold for Turbo</h2>
+            <input id="turboEnabled" class="toggle" type="checkbox">
           </div>
-          <input id="turboEnabled" class="toggle" type="checkbox">
+          <div id="turboSettings" class="temporary-settings disabled">
+            <label class="field compact"><span data-i18n="field.key">Key</span><select id="turboKey"><option value="ShiftLeft" data-i18n="key.leftShift">Left Shift</option><option value="ShiftRight" data-i18n="key.rightShift">Right Shift</option></select></label>
+            <label class="field compact"><span data-i18n="field.extraMultiplier">Extra multiplier</span><select id="turboMultiplier"><option value="1.5">1.5×</option><option value="2" selected>2×</option><option value="3">3×</option></select></label>
+          </div>
         </div>
-        <div id="turboSettings" class="turbo-settings disabled">
-          <label class="field compact"><span data-i18n="field.key">Key</span><select id="turboKey"><option value="ShiftLeft" data-i18n="key.leftShift">Left Shift</option><option value="ShiftRight" data-i18n="key.rightShift">Right Shift</option></select></label>
-          <label class="field compact"><span data-i18n="field.extraMultiplier">Extra multiplier</span><select id="turboMultiplier"><option value="1.5">1.5×</option><option value="2" selected>2×</option><option value="3">3×</option></select></label>
+        <div class="temporary-control focus-control">
+          <div class="inline-heading">
+            <div>
+              <h2 data-i18n="heading.focus">Hold for Focus</h2>
+              <p class="control-help" data-i18n="focus.help">Temporarily slow the game for reaction-heavy hazards</p>
+            </div>
+            <input id="focusEnabled" class="toggle" type="checkbox">
+          </div>
+          <div id="focusSettings" class="temporary-settings disabled">
+            <label class="field compact"><span data-i18n="field.key">Key</span><select id="focusKey"><option value="ControlLeft" data-i18n="key.leftControl">Left Ctrl</option><option value="ControlRight" data-i18n="key.rightControl">Right Ctrl</option></select></label>
+            <label class="field compact"><span data-i18n="field.targetSpeed">Target speed</span><select id="focusTargetSpeed"><option value="0.5" selected>0.5×</option><option value="0.75">0.75×</option><option value="1">1×</option></select></label>
+          </div>
         </div>
       </div>
     </section>
@@ -115,7 +128,7 @@
     <section class="summary-panel">
       <div>
         <p class="step" data-i18n="step.apply">05 · Apply</p>
-        <h2 id="summaryTitle">Base 1.5× · Gold 2× · Turbo off</h2>
+        <h2 id="summaryTitle">Base 1.5× · Gold 2× · Turbo off · Focus off</h2>
         <p id="summaryDetail">Movement zoom will be disabled; the original can be restored precisely at any time.</p>
       </div>
       <div class="actions">

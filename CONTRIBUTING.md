@@ -4,7 +4,7 @@ Bug reports and focused pull requests are welcome during the Alpha.
 
 ## Before reporting
 
-- Confirm the game is the Epic Games Store Windows `1.01.3` build.
+- Confirm the game is the Epic Games Store Windows `1.01.4b` build.
 - Read `release/KNOWN-ISSUES.md`.
 - Use the Alpha or bug Issue form.
 - Do not upload `assets.dat`, game EXE/DLL files, saves, Epic configuration, usernames, or full local paths.

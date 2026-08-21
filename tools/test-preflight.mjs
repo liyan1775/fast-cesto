@@ -28,7 +28,7 @@ try {
   const installed = createPreflightReport({
     gameDirectory,
     stateDirectory,
-    status: { state: "installed", gameVersion: "1.01.3", backupValid: true, gameRunning: false },
+    status: { state: "installed", gameVersion: "1.01.4b", backupValid: true, gameRunning: false },
   });
   requireEqual(installed.readyToInstall, true, "installed readiness");
   requireEqual(installed.blockingIssueIds.length, 0, "installed blocking count");
@@ -36,7 +36,7 @@ try {
   const running = createPreflightReport({
     gameDirectory,
     stateDirectory,
-    status: { state: "installed", gameVersion: "1.01.3", backupValid: true, gameRunning: true },
+    status: { state: "installed", gameVersion: "1.01.4b", backupValid: true, gameRunning: true },
   });
   requireEqual(running.readyToInstall, false, "running game readiness");
   requireEqual(running.blockingIssueIds.includes("GAME_PROCESS"), true, "running game issue");

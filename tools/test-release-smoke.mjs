@@ -40,9 +40,9 @@ async function post(origin, token, path, body) {
 }
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const serverPath = resolve(root, "dist", "fast-cesto-v0.1.0-alpha.2", "tools", "fast-cesto-ui.mjs");
+const serverPath = resolve(root, "dist", "fast-cesto-v0.2.0-alpha.1", "tools", "fast-cesto-ui.mjs");
 const gameDirectory = resolve(root, "SolCesto");
-const stateDirectory = resolve(root, "backups", "epic-1.01.3");
+const stateDirectory = resolve(root, "backups", "epic-1.01.4b");
 const child = spawn(
   process.execPath,
   [serverPath, gameDirectory, stateDirectory, "--no-open", "--port", "0"],
@@ -62,6 +62,9 @@ try {
   requireEqual(body.status.backupValid, true, "release detects valid backup");
   requireEqual(body.status.activeConfig.turbo.enabled, true, "release detects Turbo");
   requireEqual(body.status.activeConfig.turbo.key, "ShiftLeft", "release detects Turbo key");
+  requireEqual(body.status.activeConfig.focus.enabled, true, "release detects Focus");
+  requireEqual(body.status.activeConfig.focus.key, "ControlLeft", "release detects Focus key");
+  requireEqual(body.status.activeConfig.focus.targetSpeed, 0.5, "release detects Focus speed");
   requireEqual(body.preflight.readyToInstall, true, "release preflight readiness");
   requireEqual(body.preflight.blockingIssueIds.length, 0, "release preflight blocking count");
   const shutdown = await post(ready.url, token, "/api/shutdown", {});

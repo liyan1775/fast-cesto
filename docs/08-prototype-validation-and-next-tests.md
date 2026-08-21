@@ -1,6 +1,6 @@
 # 原型验证、测试分工与下一阶段
 
-> 当前安装：Epic `1.01.3`，内部 Alpha Turbo Preview：基础 `1.5×`、关闭行动 Zoom、永久金币 `2×`、按住左 Shift 临时提升到 `3×`。
+> 当前安装：Epic 客户端 `1.01.4b`（归档内部项目版本 `1.01.4`），`v0.2.0-alpha.1` Focus Preview：基础 `1.5×`、关闭行动 Zoom、永久金币 `2×`、按住左 Shift 临时提升到 `3×`、按住左 Ctrl 临时降到 `0.5×`。
 
 ## 1. 当前验证矩阵
 
@@ -40,6 +40,15 @@
 | 10 项兼容性预检 | 当前环境全部通过；路径修改立即撤销安装许可，刷新后重新判定 | Codex + Browser |
 | `v0.1.0-alpha.2` 发布白名单审计 | 通过；不含游戏资源、状态、日志、凭证和开发绝对路径 | Codex |
 | ZIP 中文与空格解压路径 | 独立启动、预检和诊断通过 | Codex |
+| 首名外部玩家实际使用 | 通过；Bilibili 用户确认“太好用了” | 外部测试者 |
+| 公开包传播信号 | `v0.1.0-alpha.2` ZIP 8 次下载；不能等同成功安装数 | Codex 记录 |
+| 第四区域临时减速需求 | Focus Preview 已实现并安装；危险判定时钟链自动化验证通过 | 外部测试者 + Codex |
+| 配置 schema v2 → v3 | 通过；旧配置自动补为 Focus 关闭 | Codex |
+| Focus 状态机 | 通过；基础、Turbo、Focus、重叠优先级及暂停 `0×` 自动化验证 | Codex |
+| Focus 失焦、挂起、读档复位 | 通过静态与补丁标记验证；真实场景待测 | Codex + 用户 |
+| Focus 中英文 UI | 桌面与 390px 窄屏通过；无横向溢出、无控制台错误 | Codex + Browser |
+| `v0.2.0-alpha.1` 本地候选包 | 白名单审计、Release 冒烟、中文与空格解压路径通过 | Codex |
+| Focus 第四区域炸弹怪/手陷阱 | 通过精确构建自动审计；20 秒 Timer 与 4.5 秒 Tween/致死链均使用全局缩放游戏时间 | Codex |
 | 完整 Run、Boss、商店、死亡、通关 | 未测 | 用户为主，Codex辅助 |
 | 音频舒适度和节奏选择 | 未测 | 用户 |
 | Epic Overlay、成就、云存档 | 未测 | 用户确认，Codex记录 |
@@ -55,6 +64,7 @@ Codex 可以独立完成：
 - 自动化输入、截图和关键镜头 A/B；
 - 多倍率的时序采样；
 - 菜单、常见房间和异常状态的重复回归；
+- 精确构建中的危险事件、倒计时/Tween、致死动作与 Construct 运行时时钟链审计；
 - 未知版本拒绝、重复安装和中断恢复测试；
 - 本机诊断包与 Release 包内容检查。
 
@@ -90,17 +100,19 @@ Codex 可以独立完成：
 在项目根目录执行：
 
 ```powershell
-node tools\fast-cesto.mjs status SolCesto backups\epic-1.01.3
-node tools\fast-cesto.mjs restore SolCesto backups\epic-1.01.3
-node tools\fast-cesto.mjs install SolCesto config\fast-cesto.recommended.json backups\epic-1.01.3
+node tools\fast-cesto.mjs status SolCesto backups\epic-1.01.4b
+node tools\fast-cesto.mjs restore SolCesto backups\epic-1.01.4b
+node tools\fast-cesto.mjs install SolCesto config\fast-cesto.recommended.json backups\epic-1.01.4b
 
 # 可选：启用左 Shift、2× 临时乘数的 Turbo 预览
-node tools\fast-cesto.mjs install SolCesto config\fast-cesto.turbo-preview.json backups\epic-1.01.3
+node tools\fast-cesto.mjs install SolCesto config\fast-cesto.turbo-preview.json backups\epic-1.01.4b
 ```
 
 `restore` 会恢复备份中经过哈希验证的原版；`install` 会从正版备份重新生成补丁，也可从已登记的内部 Alpha 状态安全切换配置。未知哈希一律拒绝。不要手工交换 `assets.dat`。
 
 ## 5. 下一阶段实施顺序
+
+> 2026-08-21 更新：第一名外部用户已确认公开 Alpha 可用，并提出第四区域炸弹怪、手陷阱的“按住减速”需求。下一候选版本与完整验收门槛见 [`18-next-update-plan.md`](18-next-update-plan.md)。
 
 ### M4a：把技术原型变成内部 Alpha
 
@@ -117,6 +129,19 @@ node tools\fast-cesto.mjs install SolCesto config\fast-cesto.turbo-preview.json 
 - [x] 为非命令行用户制作本地配置界面和封闭 Alpha 发布封装；
 - [ ] 根据跨机反馈决定是否捆绑独立 Node.js 运行时或构建单文件程序。
 
+### M6：Focus Preview
+
+- [x] schema v3 与 v2 自动迁移；
+- [x] 左/右 Ctrl、`0.5× / 0.75× / 1×` 绝对目标速度；
+- [x] Focus 优先于 Turbo，松开 Focus 后恢复仍按住的 Turbo；
+- [x] 失焦、键盘失焦、挂起和读档统一复位；
+- [x] 中英文 UI、诊断字段、预览配置和发布候选包；
+- [x] 本机安装 `focus-preview` 并验证归档/备份哈希；
+- [ ] 用户验证普通房间、按键重叠、暂停/切场景和 Alt+Tab；
+- [x] 自动验证第四区域炸弹怪和手陷阱的有效判定窗口随 Focus 一起减速；
+- [ ] 自然遇到上述场景时可选做一次手感确认，不要求反复抵达第四区域或故意死亡；
+- [ ] 至少一名外部用户复测后再决定公开发布与默认状态。
+
 ### M4b：用户验收
 
 - 用户对不同倍率各玩一次短局；
@@ -128,7 +153,7 @@ node tools\fast-cesto.mjs install SolCesto config\fast-cesto.turbo-preview.json 
 
 ### M5：封闭 Alpha
 
-- 只支持 Epic Windows `1.01.3` 的精确哈希；
+- 只支持 Epic Windows `1.01.4b` 的精确哈希；
 - 招募 3–5 名正版玩家；
 - [x] 生成可审计源码和补丁器候选包，不分发 `assets.dat`；
 - [x] 提供统一测试协议、反馈模板和安装前兼容性预检；
@@ -151,5 +176,6 @@ node tools\fast-cesto.mjs install SolCesto config\fast-cesto.turbo-preview.json 
 - 功能路线：**Go**；
 - 测试路线：**部分可自动化，用户与外部测试不可省略**；
 - 发布路线：**Conditional Go**，条件是先完成无版权资源的补丁器和最小跨机 Alpha；
-- 当前内部 Alpha：可供本机配置与体验，但还不是可公开发布构建。
+- 当前公开 Alpha：`v0.1.0-alpha.2` 已发布；已有一名外部用户明确确认实际可用，但样本量仍不足以进入 Beta。
+- 下一候选版本：`v0.2.0-alpha.1`，主功能为可选的按住减速（Focus）预览。
 - 金币策略：倍率进入首版；一次性大量金币作为带备份和确认的后续恢复工具。

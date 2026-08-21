@@ -14,10 +14,11 @@ import {
 } from "./c3-asset-archive.mjs";
 
 export const SUPPORTED = {
-  gameVersion: "1.01.3",
-  assetsSha256: "EAFD1E359A0804D28F174D6ECADB587BF44CC849A74839F06ABDBF4CAB88B5DD",
+  gameVersion: "1.01.4b",
+  internalProjectVersion: "1.01.4",
+  assetsSha256: "3265599AE2CF79F650C22C33E56CE4DA83BF0655B24E67447208D3C7FAEEFC69",
   runtimeSha256: "E6EC7BF9B4E8B1C00A9B3F96387B691A70BBA6EC2D2CAF42D409C54CC739AB32",
-  dataSha256: "57D83801624B4175D2C8647654FC6092E9C6001924E34772B154C76A8E6DA3B2",
+  dataSha256: "99111A8878F0ED1C9487733C245617ADCA14D343E11784EC0EB0B9A6B93029D7",
 };
 
 const MOVE_ZOOM_ACTION_SID = 938984979377417;
@@ -86,13 +87,22 @@ function replaceOnce(source, needle, replacement, label) {
   return `${source.slice(0, first)}${replacement}${source.slice(first + needle.length)}`;
 }
 
-export function patchRuntime(buffer, speed, turbo = { enabled: false }) {
+export function patchRuntime(
+  buffer,
+  speed,
+  turbo = { enabled: false },
+  focus = { enabled: false },
+) {
   let source = buffer.toString("utf8");
   const turboEnabled = turbo?.enabled === true;
   const turboKey = turbo?.key ?? "ShiftLeft";
   const turboMultiplier = turbo?.multiplier ?? 2;
-  const initialTimeScalePatch = turboEnabled
-    ? `this._timeScale=${speed},this._fastCestoMultiplier=${speed},this._fastCestoBaseTimeScale=1,this._fastCestoTurboMultiplier=${turboMultiplier},this._fastCestoTurboActive=!1,this._fastCestoSetTurbo=e=>{e=!!e,e!==this._fastCestoTurboActive&&(this._fastCestoTurboActive=e,this._timeScale=this._fastCestoBaseTimeScale*this._fastCestoMultiplier*(e?this._fastCestoTurboMultiplier:1),this._fastCestoTurboStatusText&&this._fastCestoTurboStatusText.SetText(e?"Fast Cesto Turbo on":"Fast Cesto Turbo off"))},this._maxDt=1/30`
+  const focusEnabled = focus?.enabled === true;
+  const focusKey = focus?.key ?? "ControlLeft";
+  const focusTargetSpeed = focus?.targetSpeed ?? 0.5;
+  const temporarySpeedEnabled = turboEnabled || focusEnabled;
+  const initialTimeScalePatch = temporarySpeedEnabled
+    ? `this._timeScale=${speed},this._fastCestoMultiplier=${speed},this._fastCestoBaseTimeScale=1,this._fastCestoTurboMultiplier=${turboMultiplier},this._fastCestoFocusTarget=${focusTargetSpeed},this._fastCestoTurboActive=!1,this._fastCestoFocusActive=!1,this._fastCestoUpdateTimeScale=()=>{this._timeScale=this._fastCestoBaseTimeScale*(this._fastCestoFocusActive?this._fastCestoFocusTarget:this._fastCestoMultiplier*(this._fastCestoTurboActive?this._fastCestoTurboMultiplier:1))},this._fastCestoSetTurbo=e=>{e=!!e,e!==this._fastCestoTurboActive&&(this._fastCestoTurboActive=e,this._fastCestoUpdateTimeScale(),this._fastCestoTurboStatusText&&this._fastCestoTurboStatusText.SetText(e?"Fast Cesto Turbo on":"Fast Cesto Turbo off"))},this._fastCestoSetFocus=e=>{e=!!e,e!==this._fastCestoFocusActive&&(this._fastCestoFocusActive=e,this._fastCestoUpdateTimeScale(),this._fastCestoFocusStatusText&&this._fastCestoFocusStatusText.SetText(e?"Fast Cesto Focus on":"Fast Cesto Focus off"))},this._fastCestoResetTemporarySpeed=()=>{this._fastCestoTurboActive=!1,this._fastCestoFocusActive=!1,this._fastCestoUpdateTimeScale(),this._fastCestoTurboStatusText&&this._fastCestoTurboStatusText.SetText("Fast Cesto Turbo off"),this._fastCestoFocusStatusText&&this._fastCestoFocusStatusText.SetText("Fast Cesto Focus off")},this._maxDt=1/30`
     : `this._timeScale=${speed},this._fastCestoMultiplier=${speed},this._fastCestoBaseTimeScale=1,this._maxDt=1/30`;
   source = replaceOnce(
     source,
@@ -103,8 +113,8 @@ export function patchRuntime(buffer, speed, turbo = { enabled: false }) {
   source = replaceOnce(
     source,
     "SetTimeScale(e){(isNaN(e)||e<0)&&(e=0),this._timeScale=e}",
-    turboEnabled
-      ? "SetTimeScale(e){(isNaN(e)||e<0)&&(e=0),this._fastCestoBaseTimeScale=e,this._timeScale=e*this._fastCestoMultiplier*(this._fastCestoTurboActive?this._fastCestoTurboMultiplier:1)}"
+    temporarySpeedEnabled
+      ? "SetTimeScale(e){(isNaN(e)||e<0)&&(e=0),this._fastCestoBaseTimeScale=e,this._fastCestoUpdateTimeScale()}"
       : "SetTimeScale(e){(isNaN(e)||e<0)&&(e=0),this._fastCestoBaseTimeScale=e,this._timeScale=e*this._fastCestoMultiplier}",
     "runtime time-scale setter",
   );
@@ -117,20 +127,21 @@ export function patchRuntime(buffer, speed, turbo = { enabled: false }) {
   source = replaceOnce(
     source,
     'this._timeScale=i["timescale"]',
-    turboEnabled
-      ? 'this._fastCestoBaseTimeScale=i["timescale"],this._fastCestoTurboActive=!1,this._timeScale=this._fastCestoBaseTimeScale*this._fastCestoMultiplier,this._fastCestoTurboStatusText&&this._fastCestoTurboStatusText.SetText("Fast Cesto Turbo off")'
+    temporarySpeedEnabled
+      ? 'this._fastCestoBaseTimeScale=i["timescale"],this._fastCestoResetTemporarySpeed()'
       : 'this._fastCestoBaseTimeScale=i["timescale"],this._timeScale=this._fastCestoBaseTimeScale*this._fastCestoMultiplier',
     "runtime load-state base time scale",
   );
-  if (turboEnabled) {
+  if (temporarySpeedEnabled) {
     const dispatcherNeedle = "this._dispatcher.addEventListener(\"window-blur\",e=>this._OnWindowBlur(e)),this._dispatcher.addEventListener(\"window-focus\",()=>this._OnWindowFocus())";
-    const keyLiteral = JSON.stringify(turboKey);
-    const turboDispatcherPatch = `this._fastCestoTurboStatusText=new C3.ScreenReaderText(this,"Fast Cesto Turbo off"),this._dispatcher.addEventListener("keydown",e=>{e.data&&e.data["code"]===${keyLiteral}&&this._fastCestoSetTurbo(!0)}),this._dispatcher.addEventListener("keyup",e=>{e.data&&e.data["code"]===${keyLiteral}&&this._fastCestoSetTurbo(!1)}),this._dispatcher.addEventListener("window-blur",()=>this._fastCestoSetTurbo(!1)),this._dispatcher.addEventListener("keyboard-blur",()=>this._fastCestoSetTurbo(!1)),this._dispatcher.addEventListener("suspend",()=>this._fastCestoSetTurbo(!1)),${dispatcherNeedle}`;
+    const turboKeyLiteral = JSON.stringify(turboKey);
+    const focusKeyLiteral = JSON.stringify(focusKey);
+    const temporaryDispatcherPatch = `${turboEnabled ? `this._fastCestoTurboStatusText=new C3.ScreenReaderText(this,"Fast Cesto Turbo off"),this._dispatcher.addEventListener("keydown",e=>{e.data&&e.data["code"]===${turboKeyLiteral}&&this._fastCestoSetTurbo(!0)}),this._dispatcher.addEventListener("keyup",e=>{e.data&&e.data["code"]===${turboKeyLiteral}&&this._fastCestoSetTurbo(!1)}),` : ""}${focusEnabled ? `this._fastCestoFocusStatusText=new C3.ScreenReaderText(this,"Fast Cesto Focus off"),this._dispatcher.addEventListener("keydown",e=>{e.data&&e.data["code"]===${focusKeyLiteral}&&this._fastCestoSetFocus(!0)}),this._dispatcher.addEventListener("keyup",e=>{e.data&&e.data["code"]===${focusKeyLiteral}&&this._fastCestoSetFocus(!1)}),` : ""}this._dispatcher.addEventListener("window-blur",()=>this._fastCestoResetTemporarySpeed()),this._dispatcher.addEventListener("keyboard-blur",()=>this._fastCestoResetTemporarySpeed()),this._dispatcher.addEventListener("suspend",()=>this._fastCestoResetTemporarySpeed()),${dispatcherNeedle}`;
     source = replaceOnce(
       source,
       dispatcherNeedle,
-      turboDispatcherPatch,
-      "runtime Turbo dispatcher",
+      temporaryDispatcherPatch,
+      "runtime temporary-speed dispatcher",
     );
   }
   return Buffer.from(source, "utf8");

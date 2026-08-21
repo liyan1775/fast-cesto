@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 2,
-  "gameVersion": "1.01.3",
+  "schemaVersion": 3,
+  "gameVersion": "1.01.4b",
   "speed": 1.5,
   "disableMovementZoom": true,
   "goldMultiplier": 1,
@@ -8,5 +8,10 @@
     "enabled": false,
     "key": "ShiftLeft",
     "multiplier": 2
+  },
+  "focus": {
+    "enabled": false,
+    "key": "ControlLeft",
+    "targetSpeed": 0.5
   }
 }

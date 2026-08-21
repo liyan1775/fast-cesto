@@ -1,6 +1,6 @@
 # Fast Cesto public Alpha test protocol
 
-Thank you for testing. This release supports only the exact Epic Games Store Windows `1.01.3` build. Never force it onto Steam or an unknown hash.
+Thank you for testing. This release supports only the exact Epic Games Store Windows `1.01.4b` build. Never force it onto Steam, the previous `1.01.3` build, or an unknown hash.
 
 ## Before testing
 
@@ -39,7 +39,16 @@ Stop after any write/restore failure. Download diagnostics and report the failur
 4. Trigger focus loss while holding Turbo; returning must not leave Turbo stuck.
 5. Note input loss, overlapping audio, skipped rewards, or settlement anomalies.
 
-## D. Report
+## D. Focus preview
+
+1. Enable left-Ctrl Focus `0.5×` and keep base `1.5×` plus left-Shift Turbo `2×`.
+2. Press and release Focus in a normal room; speed should drop temporarily to `0.5×` and return.
+3. Hold Turbo and then Focus; Focus must win. Release Focus while still holding Turbo; speed must return to Turbo.
+4. Optional: if a fourth-area bomb enemy or wall/hand trap appears naturally, note input and audio feel. Do not deliberately wait for death; the effective deadline clock chain is already covered by the exact-build automated audit.
+5. Cover pause, room/scene transition, Alt+Tab, and focus loss. The game must never remain stuck slow.
+6. Note Ctrl conflicts, input loss, or unusual audio behavior.
+
+## E. Report
 
 Close the game, download a privacy-filtered diagnostic report, inspect it, and use the GitHub **Alpha test report** Issue form. Restore the original if you do not plan to keep testing.
 
@@ -49,6 +58,6 @@ Stop immediately for save/game-file damage, failed restoration, unexplained prog
 
 ## 简体中文摘要
 
-只在 Epic Windows `1.01.3` 精确构建上测试。先核对 ZIP 哈希、解压、安装 Node.js 20+、单独备份存档并关闭游戏。依次完成“应用配置 → Epic 启动 → 恢复原版 → 再次启动”，再覆盖基础 `1.5×`、行动 Zoom、正常/特殊金币、Shift Turbo 按下松开、暂停、切场景和 Alt+Tab。出现写入/恢复失败、存档或游戏文件异常时立即停止。
+只在 Epic Windows `1.01.4b` 精确构建上测试。先核对 ZIP 哈希、解压、安装 Node.js 20+、单独备份存档并关闭游戏。依次完成“应用配置 → Epic 启动 → 恢复原版 → 再次启动”，再覆盖基础 `1.5×`、行动 Zoom、正常/特殊金币、Shift Turbo、Ctrl Focus、两键重叠、暂停、切场景和 Alt+Tab。第四区域危险的有效判定时钟已由精确构建自动审计确认；若正常游玩时自然遇到炸弹怪或手墙陷阱，只需反馈按键和音频手感，不必故意等到死亡。出现写入/恢复失败、存档或游戏文件异常时立即停止。
 
 使用 GitHub Alpha 测试 Issue 表单反馈；不要上传游戏文件、存档、Epic 配置、用户名或完整路径，诊断 JSON 发送前也请自行检查。

@@ -12,7 +12,7 @@ import {
 import { dirname, join, resolve } from "node:path";
 
 const ORIGINAL_ASSETS_SHA256 =
-  "EAFD1E359A0804D28F174D6ECADB587BF44CC849A74839F06ABDBF4CAB88B5DD";
+  "3265599AE2CF79F650C22C33E56CE4DA83BF0655B24E67447208D3C7FAEEFC69";
 
 function usage() {
   console.error(
@@ -109,7 +109,7 @@ async function main() {
   const gameDirectory = resolve(gameDirectoryArg);
   const prototypeDirectory = resolve(prototypeDirectoryArg);
   const backupDirectory = resolve(
-    backupDirectoryArg ?? join("backups", "epic-1.01.3"),
+    backupDirectoryArg ?? join("backups", "epic-1.01.4b"),
   );
   const targetPath = join(gameDirectory, "www", "assets.dat");
   const prototypePath = join(prototypeDirectory, "assets.dat");

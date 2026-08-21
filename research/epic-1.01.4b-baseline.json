@@ -1,0 +1,68 @@
+{
+  "capturedAt": "2026-08-21",
+  "store": "Epic Games Store",
+  "platform": "Windows",
+  "clientGameVersion": "1.01.4b",
+  "internalProjectVersion": "1.01.4",
+  "wrapper": "Construct 3 Windows WebView2",
+  "files": {
+    "SolCesto.exe": {
+      "bytes": 610816,
+      "sha256": "663268E19D05FA3502FB2574899ACF7EC088CAA8F0740960D3D8010E9F24C68C"
+    },
+    "www/assets.dat": {
+      "bytes": 229276037,
+      "sha256": "3265599AE2CF79F650C22C33E56CE4DA83BF0655B24E67447208D3C7FAEEFC69"
+    },
+    "package.json": {
+      "bytes": 1779,
+      "sha256": "9D8424D19924A4EC3591B5D945A5B988133B8192638F6EEF3D44B32D626C8EA5",
+      "note": "Contains Epic client configuration. Do not publish its contents."
+    }
+  },
+  "archive": {
+    "format": "c3ab",
+    "entryCount": 970,
+    "directoryOffset": 16,
+    "directorySize": 63415,
+    "blobOffset": 63455,
+    "blobSize": 229212582,
+    "compressedEntries": 0
+  },
+  "patchTargets": {
+    "scripts/c3runtime.js": {
+      "originalSha256": "E6EC7BF9B4E8B1C00A9B3F96387B691A70BBA6EC2D2CAF42D409C54CC739AB32",
+      "unchangedFromEpic1.01.3": true
+    },
+    "scripts/objRefTable.js": {
+      "originalSha256": "0DB867BE226B02BD00B531EF7DEA8FAE6A06333EBE148BD4EAA6E9F3DAE3E9CD"
+    },
+    "data.json": {
+      "originalSha256": "99111A8878F0ED1C9487733C245617ADCA14D343E11784EC0EB0B9A6B93029D7"
+    }
+  },
+  "compatibilityAudit": {
+    "runtimeConfigurationsChecked": 16,
+    "dataConfigurationsChecked": 6,
+    "goldTargetActionCount": 20,
+    "movementZoomActionSid": 938984979377417,
+    "hazardTimingAuditPassed": true,
+    "webViewStartupPassed": true,
+    "focusTurboInputSequencePassed": true,
+    "restoreByteIdenticalPassed": true
+  },
+  "focusPreview": {
+    "settings": {
+      "speed": 1.5,
+      "disableMovementZoom": true,
+      "goldMultiplier": 2,
+      "turboKey": "ShiftLeft",
+      "turboMultiplier": 2,
+      "focusKey": "ControlLeft",
+      "focusTargetSpeed": 0.5
+    },
+    "installedAssetsSha256": "3A0ABF800BA6EEFD29D2B7C4B6846C6405E55EFBF36890712F2FB822492A6F6E",
+    "backupDirectory": "backups/epic-1.01.4b",
+    "oldBackupPreserved": true
+  }
+}

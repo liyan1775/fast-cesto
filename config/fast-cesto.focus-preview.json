@@ -5,12 +5,12 @@
   "disableMovementZoom": true,
   "goldMultiplier": 2,
   "turbo": {
-    "enabled": false,
+    "enabled": true,
     "key": "ShiftLeft",
     "multiplier": 2
   },
   "focus": {
-    "enabled": false,
+    "enabled": true,
     "key": "ControlLeft",
     "targetSpeed": 0.5
   }

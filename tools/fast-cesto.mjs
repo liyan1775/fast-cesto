@@ -24,16 +24,18 @@ import { parseArchive, readEntry, repackArchive } from "./c3-asset-archive.mjs";
 import { recordOperation } from "./fast-cesto-diagnostics.mjs";
 
 const STATE_SCHEMA_VERSION = 1;
-const CONFIG_SCHEMA_VERSION = 2;
-const PATCH_IMPLEMENTATION_VERSION = 4;
+const CONFIG_SCHEMA_VERSION = 3;
+const PATCH_IMPLEMENTATION_VERSION = 5;
 const TRANSACTION_SCHEMA_VERSION = 1;
 const MIN_FREE_SPACE_MARGIN_BYTES = 16 * 1024 * 1024;
 const VALID_SPEEDS = new Set([1, 1.25, 1.5, 2]);
 const VALID_GOLD_MULTIPLIERS = new Set([1, 2, 3]);
 const VALID_TURBO_KEYS = new Set(["ShiftLeft", "ShiftRight"]);
 const VALID_TURBO_MULTIPLIERS = new Set([1.5, 2, 3]);
+const VALID_FOCUS_KEYS = new Set(["ControlLeft", "ControlRight"]);
+const VALID_FOCUS_TARGET_SPEEDS = new Set([0.5, 0.75, 1]);
 const DEFAULT_CONFIG_PATH = resolve("config", "fast-cesto.default.json");
-const DEFAULT_STATE_DIRECTORY = resolve("backups", "epic-1.01.3");
+const DEFAULT_STATE_DIRECTORY = resolve("backups", "epic-1.01.4b");
 
 function findErrorCode(error) {
   let current = error;
@@ -188,6 +190,9 @@ export function validateConfig(candidate) {
   if (!candidate || typeof candidate !== "object" || Array.isArray(candidate)) {
     throw new Error("Config must be a JSON object");
   }
+  if (![2, CONFIG_SCHEMA_VERSION].includes(candidate.schemaVersion)) {
+    throw new Error(`Unsupported config schemaVersion: ${candidate.schemaVersion}`);
+  }
   const expectedKeys = [
     "schemaVersion",
     "gameVersion",
@@ -195,13 +200,11 @@ export function validateConfig(candidate) {
     "disableMovementZoom",
     "goldMultiplier",
     "turbo",
+    ...(candidate.schemaVersion === CONFIG_SCHEMA_VERSION ? ["focus"] : []),
   ];
   const actualKeys = Object.keys(candidate).sort();
   if (JSON.stringify(actualKeys) !== JSON.stringify([...expectedKeys].sort())) {
     throw new Error(`Config must contain exactly: ${expectedKeys.join(", ")}`);
-  }
-  if (candidate.schemaVersion !== CONFIG_SCHEMA_VERSION) {
-    throw new Error(`Unsupported config schemaVersion: ${candidate.schemaVersion}`);
   }
   if (candidate.gameVersion !== SUPPORTED.gameVersion) {
     throw new Error(`Unsupported gameVersion: ${candidate.gameVersion}`);
@@ -232,8 +235,28 @@ export function validateConfig(candidate) {
   if (!VALID_TURBO_MULTIPLIERS.has(candidate.turbo.multiplier)) {
     throw new Error(`Unsupported turbo.multiplier: ${candidate.turbo.multiplier}`);
   }
+  const focus = candidate.schemaVersion === 2
+    ? { enabled: false, key: "ControlLeft", targetSpeed: 0.5 }
+    : candidate.focus;
+  if (!focus || typeof focus !== "object" || Array.isArray(focus)) {
+    throw new Error("focus must be a JSON object");
+  }
+  const focusKeys = Object.keys(focus).sort();
+  const expectedFocusKeys = ["enabled", "key", "targetSpeed"].sort();
+  if (JSON.stringify(focusKeys) !== JSON.stringify(expectedFocusKeys)) {
+    throw new Error("focus must contain exactly: enabled, key, targetSpeed");
+  }
+  if (typeof focus.enabled !== "boolean") {
+    throw new Error("focus.enabled must be true or false");
+  }
+  if (!VALID_FOCUS_KEYS.has(focus.key)) {
+    throw new Error(`Unsupported focus.key: ${focus.key}`);
+  }
+  if (!VALID_FOCUS_TARGET_SPEEDS.has(focus.targetSpeed)) {
+    throw new Error(`Unsupported focus.targetSpeed: ${focus.targetSpeed}`);
+  }
   return {
-    schemaVersion: candidate.schemaVersion,
+    schemaVersion: CONFIG_SCHEMA_VERSION,
     gameVersion: candidate.gameVersion,
     speed: candidate.speed,
     disableMovementZoom: candidate.disableMovementZoom,
@@ -242,6 +265,11 @@ export function validateConfig(candidate) {
       enabled: candidate.turbo.enabled,
       key: candidate.turbo.key,
       multiplier: candidate.turbo.multiplier,
+    },
+    focus: {
+      enabled: focus.enabled,
+      key: focus.key,
+      targetSpeed: focus.targetSpeed,
     },
   };
 }
@@ -339,7 +367,7 @@ async function buildStage({ backupPath, targetPath, config }) {
     runtime.length + data.length + MIN_FREE_SPACE_MARGIN_BYTES,
     "Temporary patch payloads",
   );
-  const patchedRuntime = patchRuntime(runtime, String(config.speed), config.turbo);
+  const patchedRuntime = patchRuntime(runtime, String(config.speed), config.turbo, config.focus);
   const patchedData = patchData(
     data,
     config.goldMultiplier,

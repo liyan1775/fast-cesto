@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import { parseArchive, readEntry } from "./c3-asset-archive.mjs";
 import { patchData, patchRuntime } from "./build-prototype.mjs";
 
-const [, , originalAssetsArg = "backups/epic-1.01.3/assets.dat"] = process.argv;
+const [, , originalAssetsArg = "backups/epic-1.01.4b/assets.dat"] = process.argv;
 
 function sha256(buffer) {
   return createHash("sha256").update(buffer).digest("hex").toUpperCase();
@@ -29,6 +29,7 @@ for (const marker of [
     throw new Error(`Speed save/load runtime marker missing: ${marker}`);
   }
 }
+
 for (const removedMarker of [
   '"timescale":this.GetTimeScale()',
   'this._timeScale=i["timescale"]',
@@ -49,19 +50,73 @@ for (const marker of [
   'e.data["code"]==="ShiftLeft"',
   'new C3.ScreenReaderText(this,"Fast Cesto Turbo off")',
   'SetText(e?"Fast Cesto Turbo on":"Fast Cesto Turbo off")',
-  'this._fastCestoBaseTimeScale=i["timescale"],this._fastCestoTurboActive=!1',
-  'addEventListener("window-blur",()=>this._fastCestoSetTurbo(!1))',
-  'addEventListener("keyboard-blur",()=>this._fastCestoSetTurbo(!1))',
-  'addEventListener("suspend",()=>this._fastCestoSetTurbo(!1))',
+  'this._fastCestoBaseTimeScale=i["timescale"],this._fastCestoResetTemporarySpeed()',
+  'addEventListener("window-blur",()=>this._fastCestoResetTemporarySpeed())',
+  'addEventListener("keyboard-blur",()=>this._fastCestoResetTemporarySpeed())',
+  'addEventListener("suspend",()=>this._fastCestoResetTemporarySpeed())',
 ]) {
   if (!runtimeTurbo.includes(marker)) {
     throw new Error(`Turbo runtime marker missing: ${marker}`);
   }
 }
 
+const runtimeFocus = patchRuntime(
+  runtime,
+  "1.5",
+  { enabled: true, key: "ShiftLeft", multiplier: 2 },
+  { enabled: true, key: "ControlLeft", targetSpeed: 0.5 },
+).toString("utf8");
+for (const marker of [
+  "_fastCestoFocusTarget=0.5",
+  "_fastCestoSetFocus",
+  'e.data["code"]==="ControlLeft"&&this._fastCestoSetFocus(!0)',
+  'e.data["code"]==="ControlLeft"&&this._fastCestoSetFocus(!1)',
+  'new C3.ScreenReaderText(this,"Fast Cesto Focus off")',
+  'SetText(e?"Fast Cesto Focus on":"Fast Cesto Focus off")',
+  "this._fastCestoFocusActive?this._fastCestoFocusTarget:this._fastCestoMultiplier*(this._fastCestoTurboActive?this._fastCestoTurboMultiplier:1)",
+  "SetTimeScale(e){(isNaN(e)||e<0)&&(e=0),this._fastCestoBaseTimeScale=e,this._fastCestoUpdateTimeScale()}",
+  'this._fastCestoTurboActive=!1,this._fastCestoFocusActive=!1,this._fastCestoUpdateTimeScale()',
+]) {
+  if (!runtimeFocus.includes(marker)) {
+    throw new Error(`Focus runtime marker missing: ${marker}`);
+  }
+}
+
+const runtimeState = {};
+const runtimeInitializerStart = runtimeFocus.indexOf(
+  "this._timeScale=1.5,this._fastCestoMultiplier=1.5",
+);
+const runtimeInitializerEnd = runtimeFocus.indexOf(
+  ",this._maxDt=1/30",
+  runtimeInitializerStart,
+);
+requireEqual(runtimeInitializerStart >= 0, true, "temporary runtime initializer start");
+requireEqual(runtimeInitializerEnd > runtimeInitializerStart, true, "temporary runtime initializer end");
+const runtimeInitializer = new Function(
+  runtimeFocus.slice(runtimeInitializerStart, runtimeInitializerEnd),
+);
+runtimeInitializer.call(runtimeState);
+requireEqual(runtimeState._timeScale, 1.5, "temporary runtime initial base speed");
+runtimeState._fastCestoSetTurbo(true);
+requireEqual(runtimeState._timeScale, 3, "Turbo active speed");
+runtimeState._fastCestoSetFocus(true);
+requireEqual(runtimeState._timeScale, 0.5, "Focus overrides Turbo");
+runtimeState._fastCestoSetTurbo(false);
+requireEqual(runtimeState._timeScale, 0.5, "Focus remains after Turbo release");
+runtimeState._fastCestoSetTurbo(true);
+runtimeState._fastCestoSetFocus(false);
+requireEqual(runtimeState._timeScale, 3, "Turbo resumes after Focus release");
+runtimeState._fastCestoResetTemporarySpeed();
+requireEqual(runtimeState._timeScale, 1.5, "temporary speed reset to base");
+runtimeState._fastCestoBaseTimeScale = 0;
+runtimeState._fastCestoSetFocus(true);
+requireEqual(runtimeState._timeScale, 0, "game pause remains zero under Focus");
+runtimeState._fastCestoResetTemporarySpeed();
+requireEqual(runtimeState._timeScale, 0, "game pause remains zero after reset");
+
 const expectedDataHashes = new Map([
-  [1, "042430A7EC5B64B915071D62B6EC240F0E92EF9E5E564B334832BA76AC7033D6"],
-  [2, "19CDE9242F7C2E388A04BB53FCCCB1B4D2D93416B0967E50D754A4B592148E00"],
+  [1, "71BE7C4B83B176FE7293A6BC1BAB6311BB9B08D5FB50E113657FDD739492D41C"],
+  [2, "45DB552770D1CDD1A96BDD8F712A1FA3D62A7D99C7E06F24E1678D576806B762"],
 ]);
 const results = [];
 

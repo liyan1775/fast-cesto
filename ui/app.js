@@ -19,6 +19,8 @@ const gameClosed = $("#gameClosed");
 const applyButton = $("#applyButton");
 const turboEnabled = $("#turboEnabled");
 const turboSettings = $("#turboSettings");
+const focusEnabled = $("#focusEnabled");
+const focusSettings = $("#focusSettings");
 const languageSelect = $("#languageSelect");
 let currentLanguage = "en";
 let latestStatus;
@@ -120,6 +122,11 @@ function settings() {
       key: $("#turboKey").value,
       multiplier: Number($("#turboMultiplier").value),
     },
+    focus: {
+      enabled: focusEnabled.checked,
+      key: $("#focusKey").value,
+      targetSpeed: Number($("#focusTargetSpeed").value),
+    },
   };
 }
 
@@ -195,19 +202,36 @@ function applyConfigToForm(config) {
   turboEnabled.checked = config.turbo.enabled;
   $("#turboKey").value = config.turbo.key;
   $("#turboMultiplier").value = String(config.turbo.multiplier);
+  const focus = config.focus ?? { enabled: false, key: "ControlLeft", targetSpeed: 0.5 };
+  focusEnabled.checked = focus.enabled;
+  $("#focusKey").value = focus.key;
+  $("#focusTargetSpeed").value = String(focus.targetSpeed);
   renderSummary();
 }
 
 function renderSummary() {
   const value = settings();
   turboSettings.classList.toggle("disabled", !value.turbo.enabled);
-  const effective = value.turbo.enabled ? value.speed * value.turbo.multiplier : value.speed;
-  $("#effectiveSpeed").textContent = value.turbo.enabled ? `${value.speed}× → ${effective}×` : `${value.speed}×`;
-  $("#summaryTitle").textContent = t(value.turbo.enabled ? "summary.on" : "summary.off", {
-    speed: value.speed,
-    gold: value.goldMultiplier,
+  focusSettings.classList.toggle("disabled", !value.focus.enabled);
+  const turboSpeed = value.speed * value.turbo.multiplier;
+  $("#effectiveSpeed").textContent = [
+    `${value.speed}×`,
+    ...(value.turbo.enabled ? [`T ${turboSpeed}×`] : []),
+    ...(value.focus.enabled ? [`F ${value.focus.targetSpeed}×`] : []),
+  ].join(" · ");
+  const turboSummary = value.turbo.enabled ? t("summary.turboOn", {
     side: t(value.turbo.key === "ShiftLeft" ? "summary.side.left" : "summary.side.right"),
     multiplier: value.turbo.multiplier,
+  }) : t("summary.turboOff");
+  const focusSummary = value.focus.enabled ? t("summary.focusOn", {
+    side: t(value.focus.key === "ControlLeft" ? "summary.side.left" : "summary.side.right"),
+    target: value.focus.targetSpeed,
+  }) : t("summary.focusOff");
+  $("#summaryTitle").textContent = t("summary.combined", {
+    speed: value.speed,
+    gold: value.goldMultiplier,
+    turbo: turboSummary,
+    focus: focusSummary,
   });
   $("#summaryDetail").textContent = t(value.disableMovementZoom ? "summary.zoomOff" : "summary.zoomOn");
 }
@@ -271,7 +295,7 @@ async function bootstrap() {
   }
 }
 
-document.querySelectorAll('input[name="speed"], input[name="gold"], #disableMovementZoom, #turboEnabled, #turboKey, #turboMultiplier').forEach((input) => input.addEventListener("change", renderSummary));
+document.querySelectorAll('input[name="speed"], input[name="gold"], #disableMovementZoom, #turboEnabled, #turboKey, #turboMultiplier, #focusEnabled, #focusKey, #focusTargetSpeed').forEach((input) => input.addEventListener("change", renderSummary));
 languageSelect.addEventListener("change", () => setLanguage(languageSelect.value));
 gameClosed.addEventListener("change", updateApplyState);
 gameDirectory.addEventListener("input", () => renderPreflight(null));

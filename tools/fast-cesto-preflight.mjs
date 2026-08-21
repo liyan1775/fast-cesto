@@ -77,7 +77,7 @@ export function createPreflightReport({ gameDirectory, stateDirectory, status })
     supportedState ? "pass" : "block",
     "受支持的游戏构建",
     supportedState
-      ? `已识别 Epic ${status.gameVersion ?? "1.01.3"} ${status.state === "original" ? "原版" : "Mod"}归档。`
+      ? `已识别 Epic ${status.gameVersion ?? "1.01.4b"} ${status.state === "original" ? "原版" : "Mod"}归档。`
       : "当前归档不属于已登记的原版或 Mod。",
     { state: typeof status?.state === "string" ? status.state : "unavailable" },
   ));

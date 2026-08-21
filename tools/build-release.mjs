@@ -14,7 +14,7 @@ import {
 import { basename, dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const VERSION = "0.1.0-alpha.2";
+const VERSION = "0.2.0-alpha.1";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DIST_DIRECTORY = join(ROOT, "dist");
 const OUTPUT_DIRECTORY = join(DIST_DIRECTORY, `fast-cesto-v${VERSION}`);
@@ -24,6 +24,7 @@ const FILES = [
   "config/fast-cesto.default.json",
   "config/fast-cesto.recommended.json",
   "config/fast-cesto.turbo-preview.json",
+  "config/fast-cesto.focus-preview.json",
   "ui/index.html",
   "ui/i18n.js",
   "ui/styles.css",
@@ -136,7 +137,7 @@ writeFileSync(manifestPath, `${JSON.stringify({
   schemaVersion: 1,
   product: "Fast Cesto",
   version: VERSION,
-  supportedGame: { store: "Epic Games Store", platform: "Windows", version: "1.01.3" },
+  supportedGame: { store: "Epic Games Store", platform: "Windows", version: "1.01.4b" },
   containsGameResources: false,
   createdAt: new Date().toISOString(),
   files: payloadFiles,
